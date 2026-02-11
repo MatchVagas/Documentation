@@ -60,3 +60,7 @@
 === Requisitos Não Funcionais
 //
 
+== Apêndices
+// Aqui serão incluídos quaisquer apêndices relevantes para o documento de levantamento de requisitos.
+
+== Aprovação
