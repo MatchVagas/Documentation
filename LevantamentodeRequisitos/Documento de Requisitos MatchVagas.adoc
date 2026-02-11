@@ -1,2 +1,9 @@
 = Grupo MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
 = Documento de Levantamento de Requisitos v1.0
+
+== Histórico de Revisão
+[cols="1,1,1,1", options="header"]
+|===
+| Data | Versão | Autor | Descrição da Modificação
+
+|===
