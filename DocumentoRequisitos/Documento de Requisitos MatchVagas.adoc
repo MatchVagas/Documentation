@@ -1,0 +1,62 @@
+= Grupo MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
+= Documento de Levantamento de Requisitos v1.0
+
+== Histórico de Revisão
+[cols="1,1,1,1", options="header"]
+|===
+| Data | Versão | Autor | Descrição da Modificação
+
+|===
+
+== Sumário
+// O sumário é gerado automaticamente pelo AsciiDoc, portanto, não é necessário preenchê-lo manualmente.
+
+== Introdução
+// alguem aqui
+
+=== Propósito
+// O propósito deste documento é definir os requisitos para o sistema de banco de vagas de trabalho e estágio, denominado MatchVagas. Este sistema tem como objetivo conectar candidatos a vagas de emprego e estágio, facilitando o processo de recrutamento para empresas e a busca por oportunidades para os candidatos.
+
+=== Especificação do Requisitos de Software
+// Aqui serão listados os requisitos funcionais e não funcionais do sistema MatchVagas.
+
+=== Escopo do Sistema
+// O sistema MatchVagas permitirá que empresas publiquem vagas de emprego e estágio, e que candidatos se inscrevam nessas vagas. O sistema também oferecerá funcionalidades de busca e filtragem para facilitar a navegação pelos candidatos.
+
+=== Definições, Siglas e Abreviações
+// - MatchVagas: O nome do sistema de banco de vagas de trabalho e estágio.
+// - Requisitos Funcionais: As funcionalidades que o sistema deve possuir para atender às necessidades dos
+
+== Referencias
+
+== Descrição Geral do Sistema
+
+=== Perspectiva do Produto
+// O sistema MatchVagas será uma aplicação web acessível por meio de navegadores, permitindo que empresas e candidatos interajam com a plataforma para publicar e se candidatar a vagas de emprego e estágio.
+
+=== Funções do Produto
+// - Cadastro de Empresas: Permitir que as empresas criem perfis e publiquem vagas      
+
+=== Usuários do Produto
+// - Empresas: Usuários que publicam vagas de emprego e estágio.
+
+
+== Requisitos
+//  
+
+=== Identificação dos Requisitos
+// Cada requisito será identificado por um código único, seguindo a estrutura "REQ-XXX", onde "XXX" é um número sequencial.
+
+=== Prioridade dos Requisitos
+// Os requisitos serão classificados em três níveis de prioridade: Alta, Média e Baixa. A prioridade será determinada com base na importância do requisito para o funcionamento do sistema e para a satisfação dos usuários
+// - Alta: Requisitos essenciais para o funcionamento do sistema.
+// - Média: Requisitos importantes, mas não essenciais para o funcionamento do sistema.
+// - Baixa: Requisitos desejáveis, mas não essenciais para o funcionamento do sistema.
+
+=== Requisitos Funcionais
+// - REQ-001: O sistema deve permitir que as empresas criem perfis e publiquem vagas de emprego e estágio.
+// - REQ-002: O sistema deve permitir que os    
+
+=== Requisitos Não Funcionais
+//
+
