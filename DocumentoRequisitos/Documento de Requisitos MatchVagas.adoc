@@ -258,6 +258,7 @@ Requisitos funcionais descrevem as diversas funções que usuários e clientes q
 
 == Aprovação
 
+[width=75%]
 [cols="^,^,^", options="header"]
 |====
 | Integrante | Assinatura | Data
