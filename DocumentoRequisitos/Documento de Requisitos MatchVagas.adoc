@@ -16,7 +16,7 @@
 | 06/02/2026 | v1.0 | Elaboração do primeira versão deste documento | Romário Andrade
 | 10/02/2026 | v2.0 | Adicionado o campo idade no requisito filtro de vagas - [RF001] | Lucas dias
 | 15/02/2026 | v2.0 | Adicionar requisitos na filtragem de vagas - [RF007] | Lucas Dias
-| 15/02/2026 | v2.0 | Adicionar notificação a o candidato da vaga - [RF009] | Lucas Dias
+| 15/02/2026 | v2.0 | Adicionar notificação a o candidato da vaga - [RF009] |jbuhbhj
 |====
 
 == Introdução
@@ -34,7 +34,7 @@ O documento de requisitos descreve os requisitos funcionais e não funcionais qu
 O sistema permitirá o cadastro, divulgação e gerenciamento de vagas de trabalho e estágio, bem como o cadastro de candidatos e empresas, possibilitando candidaturas e acompanhamento do processo.
 
 Principais benefícios:
-
+* Seu primeiro emprego ou estágio começa aqui.
 * Centralização das oportunidades de trabalho e estágio.
 * Facilitação do processo de candidatura.
 * Apoio ao recrutamento por parte das empresas.
@@ -84,6 +84,7 @@ O sistema será uma aplicação web independente, acessível via navegadores mod
 * Administração do sistema.
 
 === Descrição dos Usuários
+
 * *Candidato*: usuários que buscam vagas e se candidatam.
 * *Empresa/Recrutador*: usuários que publicam e gerenciam vagas.
 * *Administrador*: usuários com permissões de gestão global.
@@ -251,7 +252,7 @@ Requisitos funcionais descrevem as diversas funções que usuários e clientes q
 *Prioridade*: Importante
 
 ==== [RNF010] - Confiabilidade
-*Descrição*: O sistema não deve permitir candidaturas duplicadas para a mesma vaga e deve validar corretamente os dados inseridos nos formulários antes do envio.
+*Descrição*: O sistema não deve permitir candidaturas duplicadas para a mesma vaga e deve validar corretamente os dados inseridos nos formulários antes do envio. Garantido que o candidato não passe por tumultos.
 
 *Prioridade*: Essencial
 
