@@ -135,7 +135,7 @@ Requisitos funcionais descrevem as diversas funções que usuários e clientes q
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Dados da empresa, descrição, porte, ramo de atuação, site, endereço e informações de contato. Usuário autenticado como empresa.
+*Entradas e pré-condições*: Razão Social da empresa, descrição, porte, ramo de atuação, site, endereço e informações de contato. Usuário autenticado como empresa.
 
 *Saída e pós-condição*: Perfil da empresa atualizado. Empresa apta a cadastrar e gerenciar vagas.
 
