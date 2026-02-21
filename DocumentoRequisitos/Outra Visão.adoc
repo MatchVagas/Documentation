@@ -1,0 +1,449 @@
+= Documento de Requisitos do Sistema Banco de Vagas de Emprego e Estágio
+:revnumber: 1.0
+:revdate: 2025-04-10
+:author: Equipe de Análise
+:email: analise@exemplo.com
+:keywords: requisitos, vagas, emprego, estágio, plataforma
+:toc: left
+:toclevels: 4
+:sectnums:
+
+== Introdução
+
+Este documento descreve os requisitos funcionais e não funcionais para o desenvolvimento do sistema Banco de Vagas de Emprego e Estágio, uma plataforma web que conecta candidatos a oportunidades de trabalho e estágio, e permite que empresas gerenciem suas vagas e processos seletivos.
+
+=== Objetivo
+
+O objetivo principal do sistema é facilitar a intermediação entre candidatos e empresas, oferecendo um ambiente centralizado para publicação, busca e candidatura a vagas de emprego e estágio. O sistema deve ser intuitivo, acessível e eficiente, garantindo uma experiência positiva para todos os usuários.
+
+=== Escopo
+
+O sistema abrangerá as seguintes funcionalidades principais:
+
+Cadastro e gerenciamento de perfis de candidatos e empresas (recrutadores).
+
+Publicação, edição e remoção de vagas por empresas.
+
+Busca e filtragem avançada de vagas por candidatos.
+
+Candidatura a vagas com upload de currículo e preenchimento de informações complementares.
+
+Acompanhamento do status das candidaturas por parte dos candidatos.
+
+Gerenciamento de candidaturas recebidas pelas empresas (triagem, agendamento de entrevistas, etc.).
+
+Painel administrativo para gestão de usuários, vagas e denúncias.
+
+Notificações por e-mail sobre novas vagas, candidaturas e mudanças de status.
+
+=== Definições, Acrônimos e Abreviações
+
+[cols="1,2", options="header"]
+|===
+| Termo | Definição
+| Candidato | Usuário que busca oportunidades de emprego ou estágio.
+| Empresa | Entidade (pessoa jurídica) que publica vagas e gerencia processos seletivos.
+| Recrutador | Representante da empresa responsável pelas vagas e candidaturas.
+| Administrador | Usuário com privilégios totais para gerenciar o sistema.
+| Vaga | Oportunidade de emprego ou estágio publicada por uma empresa.
+| Candidatura | Ato de um candidato se inscrever em uma vaga específica.
+| Currículo | Documento (PDF, DOCX) com informações profissionais do candidato.
+| Denúncia | Reclamação de um usuário sobre conteúdo impróprio ou comportamento inadequado.
+|===
+
+== Requisitos Funcionais
+
+Os requisitos funcionais estão organizados por módulos e atores. Para cada requisito são especificados: ator, entrada, pré-condição, saída e pós-condição.
+
+=== Módulo de Autenticação e Perfil
+
+==== RF01 - Cadastro de Candidato
+O sistema deve permitir que um candidato se registre informando: nome completo, CPF, e-mail, senha, telefone, data de nascimento, endereço e currículo (opcional no cadastro). Deve ser enviado um e-mail de confirmação.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato (não autenticado)
+| Entrada | Nome completo, CPF, e-mail, senha, telefone, data de nascimento, endereço, currículo (opcional)
+| Pré-condição | O candidato não possui cadastro ativo com o mesmo e-mail ou CPF. O sistema está disponível.
+| Saída | Mensagem de sucesso na tela; e-mail de confirmação enviado para o endereço informado.
+| Pós-condição | Os dados do candidato são armazenados no banco de dados (com senha criptografada). Uma conta é criada com status pendente de confirmação de e-mail. Um registro de log é gerado.
+|===
+
+==== RF02 - Cadastro de Empresa/Recrutador
+O sistema deve permitir que uma empresa se registre informando: razão social, CNPJ, e-mail corporativo, senha, telefone, endereço, porte da empresa, ramo de atuação e nome do responsável. A conta de empresa deve ser aprovada pelo administrador antes de poder publicar vagas.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Representante da empresa (não autenticado)
+| Entrada | Razão social, CNPJ, e-mail corporativo, senha, telefone, endereço, porte, ramo, nome do responsável
+| Pré-condição | A empresa não possui cadastro com o mesmo CNPJ ou e-mail. O e-mail é válido.
+| Saída | Mensagem de solicitação enviada para aprovação; e-mail de confirmação de cadastro enviado.
+| Pós-condição | Empresa cadastrada no sistema com status "pendente de aprovação". Dados armazenados de forma segura.
+|===
+
+==== RF03 - Login
+O sistema deve autenticar usuários (candidatos, recrutadores, administradores) por e-mail e senha, com opção de "lembrar-me" e recuperação de senha via e-mail.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Usuário (candidato, recrutador ou administrador) não autenticado
+| Entrada | E-mail, senha
+| Pré-condição | O usuário possui cadastro ativo e confirmado (quando aplicável). O sistema está disponível.
+| Saída | Redirecionamento para a página inicial (painel conforme perfil); cookie/sessão de autenticação.
+| Pós-condição | Usuário autenticado no sistema. Registro de log de acesso.
+|===
+
+==== RF04 - Perfil de Candidato
+O candidato pode editar suas informações, adicionar/remover experiências profissionais, formação acadêmica, habilidades, idiomas e anexar/atualizar currículo.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato autenticado
+| Entrada | Dados editados: experiências, formação, habilidades, idiomas, currículo (arquivo)
+| Pré-condição | O candidato está logado no sistema.
+| Saída | Confirmação de atualização; perfil atualizado exibido.
+| Pós-condição | Os dados do candidato são atualizados no banco de dados. O currículo antigo pode ser substituído ou versionado.
+|===
+
+==== RF05 - Perfil de Empresa
+O recrutador pode editar as informações da empresa, adicionar outros recrutadores (com diferentes níveis de permissão) e gerenciar a logo da empresa.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Dados da empresa editados, logo (upload), e-mail de novos recrutadores, permissões
+| Pré-condição | O recrutador possui permissão para editar o perfil da empresa (ex.: administrador da conta).
+| Saída | Confirmação de alterações; lista de recrutadores atualizada.
+| Pós-condição | Dados da empresa atualizados. Novos recrutadores são associados à empresa (com e-mails de convite enviados).
+|===
+
+=== Módulo de Gerenciamento de Vagas (Empresa)
+
+==== RF06 - Publicar Vaga
+O recrutador pode criar uma nova vaga informando: título, descrição, tipo (CLT, PJ, estágio, temporário), localização (presencial, remoto, híbrido), faixa salarial, benefícios, requisitos obrigatórios e desejáveis, data de início e data de encerramento das inscrições.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Título, descrição, tipo, localização, faixa salarial, benefícios, requisitos obrigatórios/desejáveis, datas de início e encerramento
+| Pré-condição | A empresa do recrutador está com cadastro aprovado. O recrutador está logado.
+| Saída | Confirmação de publicação; visualização da vaga recém-criada.
+| Pós-condição | Nova vaga inserida no banco de dados, visível nas buscas a partir da data de início (ou imediatamente).
+|===
+
+==== RF07 - Editar/Excluir Vaga
+O recrutador pode editar os dados de uma vaga publicada (exceto após a data de encerramento) ou excluí-la, desde que não haja candidaturas em andamento. Vagas com candidaturas podem ser encerradas antecipadamente, mas não excluídas.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Identificador da vaga, novos dados (para edição) ou ação de exclusão/encerramento
+| Pré-condição | A vaga pertence à empresa do recrutador. Para exclusão, a vaga não possui candidaturas.
+| Saída | Confirmação da ação (edição, exclusão ou encerramento antecipado)
+| Pós-condição | Dados da vaga atualizados; se excluída, removida do sistema (ou marcada como inativa); se encerrada, impedida de receber novas candidaturas.
+|===
+
+==== RF08 - Visualizar Candidaturas
+O recrutador pode visualizar a lista de candidatos inscritos em cada vaga, com informações resumidas e link para o currículo.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Seleção de uma vaga específica
+| Pré-condição | A vaga pertence à empresa do recrutador. O recrutador está logado.
+| Saída | Lista de candidatos inscritos, com nome, e-mail, data de candidatura, link para currículo e status atual.
+| Pós-condição | Nenhuma alteração no sistema.
+|===
+
+==== RF09 - Gerenciar Etapas
+O recrutador pode alterar o status de cada candidatura (ex.: "Em análise", "Entrevista agendada", "Aprovado", "Reprovado") e adicionar comentários internos.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Identificador da candidatura, novo status, comentários internos (opcional)
+| Pré-condição | A candidatura pertence a uma vaga da empresa do recrutador.
+| Saída | Confirmação de atualização; status visível no histórico da candidatura.
+| Pós-condição | Status da candidatura alterado no banco de dados. Uma notificação pode ser enviada ao candidato (conforme RF20). Comentários internos armazenados.
+|===
+
+==== RF10 - Buscar Candidatos
+O recrutador pode buscar candidatos no banco de currículos por habilidades, formação, pretensão salarial, etc., e convidá-los para se candidatar a vagas específicas.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Recrutador autenticado
+| Entrada | Critérios de busca: habilidades, formação, faixa salarial, localização, etc.
+| Pré-condição | O recrutador está logado. O banco de currículos contém perfis de candidatos.
+| Saída | Lista de candidatos que atendem aos critérios, com informações resumidas e opção de convite.
+| Pós-condição | Nenhuma alteração (a menos que um convite seja enviado, o que gera uma notificação).
+|===
+
+=== Módulo de Busca e Candidatura (Candidato)
+
+==== RF11 - Buscar Vagas
+O candidato pode pesquisar vagas por palavras-chave, localização, tipo de vaga, faixa salarial, e filtros adicionais (data de publicação, empresa, etc.). A busca deve retornar resultados ordenados por relevância ou data.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato (pode estar autenticado ou não)
+| Entrada | Palavras-chave, filtros (localização, tipo, faixa salarial, data)
+| Pré-condição | O sistema está disponível. Existem vagas ativas cadastradas.
+| Saída | Lista de vagas que correspondem aos critérios, ordenadas por relevância ou data, com informações básicas (título, empresa, local, salário).
+| Pós-condição | Nenhuma alteração.
+|===
+
+==== RF12 - Visualizar Detalhes da Vaga
+O candidato pode visualizar a descrição completa da vaga, informações da empresa e requisitos. Deve ser possível salvar a vaga como favorito para consulta posterior.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato (pode estar autenticado ou não)
+| Entrada | Identificador da vaga selecionada
+| Pré-condição | A vaga está ativa e não expirada.
+| Saída | Página com descrição completa da vaga, requisitos, benefícios, informações da empresa, e opções de candidatar-se (se autenticado) ou salvar como favorito.
+| Pós-condição | Se o candidato estiver autenticado e salvar como favorito, a vaga é associada à sua lista de favoritos.
+|===
+
+==== RF13 - Candidatar-se
+O candidato pode se candidatar a uma vaga, anexando o currículo (caso ainda não tenha em seu perfil) ou utilizando o currículo já cadastrado. O sistema deve impedir candidaturas duplicadas para a mesma vaga.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato autenticado
+| Entrada | Confirmação de candidatura, opção de anexar currículo (se não houver no perfil) ou selecionar currículo já cadastrado
+| Pré-condição | Vaga ativa. Candidato não possui candidatura prévia para esta vaga. O candidato possui currículo (anexado ou já no perfil).
+| Saída | Mensagem de confirmação de candidatura realizada com sucesso.
+| Pós-condição | Nova candidatura registrada no banco de dados. A empresa é notificada (conforme RF20). O candidato pode acompanhar o status.
+|===
+
+==== RF14 - Acompanhar Candidaturas
+O candidato pode visualizar o histórico de suas candidaturas e o status atual de cada uma (ex.: "Em análise", "Entrevista marcada", "Encerrada").
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato autenticado
+| Entrada | Nenhuma (acesso à página de candidaturas)
+| Pré-condição | Candidato está logado.
+| Saída | Lista de todas as candidaturas realizadas, com data, vaga, empresa, status atual, e possibilidade de ver detalhes.
+| Pós-condição | Nenhuma alteração.
+|===
+
+==== RF15 - Denunciar Vaga
+O candidato pode denunciar uma vaga suspeita ou inapropriada, fornecendo um motivo. A denúncia será encaminhada ao administrador.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Candidato autenticado
+| Entrada | Identificador da vaga, motivo da denúncia (texto livre ou categorias predefinidas)
+| Pré-condição | Candidato está logado. A vaga existe.
+| Saída | Confirmação de que a denúncia foi registrada.
+| Pós-condição | Denúncia armazenada no sistema, associada à vaga e ao candidato, aguardando análise do administrador.
+|===
+
+=== Módulo Administrativo
+
+==== RF16 - Gerenciar Usuários
+O administrador pode visualizar, ativar, desativar ou excluir contas de candidatos e empresas. Pode também aprovar ou rejeitar novos cadastros de empresas.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Administrador autenticado
+| Entrada | Listagem de usuários com filtros; seleção de um usuário; ação a ser executada (ativar, desativar, excluir, aprovar, rejeitar)
+| Pré-condição | Administrador está logado.
+| Saída | Confirmação da ação; lista de usuários atualizada.
+| Pós-condição | Estado do usuário alterado (status, exclusão lógica). Em caso de aprovação de empresa, esta fica habilitada a publicar vagas.
+|===
+
+==== RF17 - Gerenciar Vagas
+O administrador pode visualizar todas as vagas publicadas, editar, encerrar ou excluir vagas que violem as políticas do sistema.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Administrador autenticado
+| Entrada | Listagem de vagas com filtros; seleção de uma vaga; ação (editar, encerrar, excluir)
+| Pré-condição | Administrador está logado.
+| Saída | Confirmação da ação; lista de vagas atualizada.
+| Pós-condição | Vaga modificada, encerrada ou removida (lógica ou fisicamente). Registro de log da ação.
+|===
+
+==== RF18 - Gerenciar Denúncias
+O administrador pode visualizar as denúncias feitas por candidatos, analisar a vaga denunciada e tomar as devidas providências (notificar empresa, remover vaga, suspender usuário).
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Administrador autenticado
+| Entrada | Listagem de denúncias pendentes; seleção de uma denúncia; decisão (ignorar, notificar empresa, remover vaga, suspender usuário) e justificativa
+| Pré-condição | Administrador está logado. Existem denúncias pendentes.
+| Saída | Confirmação da decisão; denúncia marcada como resolvida.
+| Pós-condição | Ação aplicada (ex.: vaga removida, usuário suspenso). Registro da decisão.
+|===
+
+==== RF19 - Relatórios Gerenciais
+O sistema deve gerar relatórios básicos para o administrador, como número de vagas publicadas por período, número de candidatos cadastrados, taxa de preenchimento de vagas, etc.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Administrador autenticado
+| Entrada | Seleção de período, tipo de relatório (vagas, candidatos, preenchimento)
+| Pré-condição | Administrador está logado. Existem dados no sistema para o período selecionado.
+| Saída | Relatório apresentado em tela (gráficos/tabelas), com opção de exportação (PDF, Excel).
+| Pós-condição | Nenhuma alteração nos dados.
+|===
+
+=== Requisitos Comuns
+
+==== RF20 - Notificações por E-mail
+O sistema deve enviar e-mails automáticos para:
+
+Confirmação de cadastro (candidato e empresa).
+
+Aprovação/rejeição de empresa.
+
+Nova candidatura (para a empresa).
+
+Mudança de status da candidatura (para o candidato).
+
+Vagas recomendadas (baseado no perfil do candidato) – opcional.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Sistema (automático)
+| Entrada | Evento disparador (ex.: cadastro realizado, candidatura efetuada, alteração de status)
+| Pré-condição | O evento ocorreu. O destinatário possui e-mail válido e não optou por não receber notificações (quando aplicável).
+| Saída | E-mail enviado com sucesso para o destinatário. Em caso de falha, registro em log.
+| Pós-condição | Registro do envio no log de notificações. O destinatário recebe a informação.
+|===
+
+==== RF21 - Segurança e Privacidade
+O sistema deve garantir que os dados pessoais (CPF, RG, etc.) sejam armazenados de forma segura (criptografia) e que apenas os usuários autorizados tenham acesso a informações sensíveis. O sistema deve estar em conformidade com a LGPD (Lei Geral de Proteção de Dados).
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Sistema (arquitetura/desenvolvimento)
+| Entrada | Dados sensíveis durante operações de cadastro, edição e consulta
+| Pré-condição | O sistema está em operação. Dados estão sendo manipulados.
+| Saída | Dados criptografados em repouso e em trânsito; logs de acesso; consentimento do usuário registrado.
+| Pós-condição | Dados protegidos conforme políticas de segurança e LGPD. Acesso restrito a usuários autorizados.
+|===
+
+==== RF22 - Responsividade
+O sistema deve ser acessível via dispositivos móveis (smartphones e tablets) com adaptação responsiva da interface.
+
+[cols="1,3a", options="header"]
+|===
+| Campo | Descrição
+| Ator | Sistema (desenvolvimento/front-end)
+| Entrada | Requisições de diferentes tamanhos de tela (viewport)
+| Pré-condição | A interface foi desenvolvida com técnicas de design responsivo (CSS media queries, grids flexíveis).
+| Saída | Páginas renderizadas de forma adequada ao dispositivo do usuário, sem perda de funcionalidade ou usabilidade.
+| Pós-condição | Experiência de usuário consistente em dispositivos móveis e desktop.
+|===
+
+== Requisitos Não Funcionais
+
+=== Desempenho
+
+RNF01 - Tempo de Resposta:: As páginas devem carregar em no máximo 3 segundos em conexões de banda larga comum. As operações de busca devem retornar resultados em até 2 segundos.
+
+RNF02 - Concorrência:: O sistema deve suportar até 1.000 usuários simultâneos sem degradação significativa de performance.
+
+RNF03 - Disponibilidade:: O sistema deve estar disponível 99,5% do tempo (exceto para manutenções programadas).
+
+=== Segurança
+
+RNF04 - Autenticação e Autorização:: A senha deve ser armazenada utilizando hash seguro (bcrypt). As permissões devem ser validadas em cada requisição a recursos protegidos.
+
+RNF05 - Proteção contra Ataques:: O sistema deve ser protegido contra ataques comuns (SQL Injection, XSS, CSRF) através de práticas de codificação segura e uso de frameworks adequados.
+
+RNF06 - Logs e Auditoria:: Todas as ações críticas (criação de conta, exclusão de vaga, alteração de status) devem ser registradas em logs de auditoria com data, hora, IP e usuário.
+
+=== Usabilidade
+
+RNF07 - Interface Intuitiva:: A interface deve ser simples e autoexplicativa, seguindo padrões de usabilidade conhecidos, com menus claros e mensagens de erro amigáveis.
+
+RNF08 - Acessibilidade:: O sistema deve seguir as diretrizes WCAG 2.1 nível AA, garantindo acessibilidade para pessoas com deficiência visual, motora, etc.
+
+=== Confiabilidade
+
+RNF09 - Integridade dos Dados:: O sistema deve garantir que as operações de criação/atualização/exclusão sejam atômicas e consistentes, utilizando transações em banco de dados.
+
+RNF10 - Backup:: Deve ser realizado backup completo do banco de dados diariamente, com retenção mínima de 30 dias.
+
+=== Tecnológicos
+
+RNF11 - Plataforma:: O sistema deve ser desenvolvido em arquitetura web, utilizando tecnologias open-source (ex.: Java/Spring Boot, Python/Django, Node.js) e banco de dados relacional (PostgreSQL, MySQL).
+
+RNF12 - Navegadores Suportados:: O sistema deve funcionar corretamente nas versões mais recentes dos principais navegadores: Chrome, Firefox, Edge, Safari.
+
+== Restrições
+
+O sistema deve ser entregue em até 6 meses a partir da assinatura do contrato.
+
+O orçamento total para desenvolvimento não deve ultrapassar R$ 200.000,00.
+
+O sistema deve ser hospedado em nuvem pública (AWS, Google Cloud ou Azure), com escalabilidade automática.
+
+O código-fonte deve ser entregue ao final do projeto com toda a documentação técnica.
+
+== Casos de Uso
+
+Abaixo estão listados os principais casos de uso do sistema, com seus respectivos atores e descrições sucintas.
+
+[cols="1,1,2", options="header"]
+|===
+| Código | Caso de Uso | Descrição
+| UC01 | Cadastrar candidato | O candidato fornece seus dados e cria uma conta.
+| UC02 | Cadastrar empresa | O recrutador fornece dados da empresa e solicita cadastro (aguarda aprovação).
+| UC03 | Autenticar usuário | O usuário informa e-mail e senha para acessar o sistema.
+| UC04 | Gerenciar perfil candidato | O candidato visualiza/edita suas informações e currículo.
+| UC05 | Gerenciar perfil empresa | O recrutador visualiza/edita dados da empresa e gerencia recrutadores adicionais.
+| UC06 | Publicar vaga | O recrutador cria uma nova oportunidade de trabalho.
+| UC07 | Buscar vagas | O candidato pesquisa vagas utilizando filtros.
+| UC08 | Candidatar-se a vaga | O candidato se inscreve em uma vaga de interesse.
+| UC09 | Gerenciar candidaturas (empresa) | O recrutador visualiza e altera status das candidaturas.
+| UC10 | Acompanhar candidaturas (candidato) | O candidato visualiza o status de suas inscrições.
+| UC11 | Denunciar vaga | O candidato reporta uma vaga suspeita.
+| UC12 | Aprovar empresa (admin) | O administrador aprova ou rejeita cadastros de empresas.
+| UC13 | Gerenciar denúncias (admin) | O administrador analisa denúncias e toma providências.
+| UC14 | Gerar relatórios (admin) | O administrador acessa estatísticas do sistema.
+|===
+
+== Regras de Negócio
+
+RN01 - Uma empresa só pode publicar vagas após ter seu cadastro aprovado pelo administrador.
+
+RN02 - O candidato não pode se candidatar mais de uma vez para a mesma vaga.
+
+RN03 - Vagas com data de encerramento expirada não devem mais aparecer nos resultados de busca (a menos que o recrutador as reative).
+
+RN04 - O currículo do candidato deve ser armazenado em formato PDF ou DOCX, com tamanho máximo de 5 MB.
+
+RN05 - Um recrutador não pode excluir uma vaga que já possui candidaturas; apenas encerrá-la antecipadamente (impedindo novas candidaturas).
+
+RN06 - As denúncias devem ser analisadas pelo administrador em até 48 horas úteis.
+
+== Considerações Finais
+
+Este documento é uma versão inicial dos requisitos e pode ser refinado ao longo do projeto, conforme feedback dos stakeholders. Todos os requisitos aqui descritos devem ser validados com o cliente antes do início do desenvolvimento. A equipe de desenvolvimento e análise deve manter este documento atualizado durante todo o ciclo de vida do sistema.

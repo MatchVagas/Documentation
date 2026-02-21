@@ -1,0 +1,88 @@
+= Nome do time - Nome do Projeto
+Documento de Arquitetura de Software
+Versão 1.0
+:revnumber: v3.0
+:revdate: 21/02/2026
+:author: Grupo MatchVagas
+:toc: auto
+:toclevels: 4
+:icons: font
+:numbered:
+:lang: pt-BR
+
+[options="header"]
+|===
+| Gestor do projeto | Gerente do projeto
+| Nome Completo | Nome Completo
+| ['email'] | ['email']
+|===
+
+== Histórico de Revisões
+
+[options="header"]
+|===
+| Versão | Data | Descrição | Autor
+| | | |
+| | | |
+| | | |
+|===
+
+[[introducao]]
+== INTRODUÇÃO
+
+[[finalidade]]
+=== Finalidade
+
+'Falar sobre a finalidade do projeto e como o mesmo foi idealizado'
+
+[[escopo]]
+=== Escopo
+
+'Apresentar a finalidade da documentação apresentada'
+
+[[definicoes]]
+=== Definições, Acrônimos e Abreviações
+
+'Falar sobre termos e convenções utilizadas para pessoas que possam não ter o conhecimento técnico'
+
+[[referencias]]
+=== Referências
+
+'Referencias usadas para realizar a documentação'
+
+[[representacao]]
+== REPRESENTAÇÃO ARQUITETURAL
+
+'Visão da arquitetura do documento junto a quais setores cada um e destinado'
+
+[[requisitos]]
+== REQUISITOS E RESTRIÇÕES ARQUITETURAIS
+
+Especificar linguagem, plataforma e a segurança falando a necessidade e como poderia ocorrer.
+
+[[visaocasouso]]
+== VISÃO DE CASOS DE USO
+
+Sessão que fala sobre os requerimentos principais do sistema(backbone) apresentando a descrição das mesmas e os casos de uso.
+
+[[casosusosig]]
+=== Casos de Uso significantes para a arquitetura
+
+Apresentar casos de uso do backbone e o BPMN destes requisitos.
+
+[[visaologica]]
+== VISÃO LÓGICA
+
+['Apresentação sobre as principais classes do sistema e como as mesmas se relacionam para fazer a aplicação base']
+
+[[aprovacao]]
+== Aprovação:
+
+.*Aprovações*
+[options="header"]
+|===
+| Integrante | Assinatura | Data
+| | |
+| | |
+| | |
+|===
