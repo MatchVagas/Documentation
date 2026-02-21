@@ -1,4 +1,4 @@
-= Documento de Requisitos do Sistema de Banco de Vagas de Trabalho e Estágio
+= Documento de Requisitos do Sistema MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio -
 :revnumber: v3.0
 :revdate: 15/02/2026
 :author: Grupo MatchVagas
