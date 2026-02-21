@@ -23,8 +23,6 @@ Versão 1.0
 |===
 | Versão | Data | Descrição | Autor
 | | | |
-| | | |
-| | | |
 |===
 
 [[introducao]]
@@ -82,7 +80,5 @@ Apresentar casos de uso do backbone e o BPMN destes requisitos.
 [options="header"]
 |===
 | Integrante | Assinatura | Data
-| | |
-| | |
 | | |
 |===
