@@ -27,51 +27,48 @@ Versão 1.0
 | | | |
 |===
 
-== Sumário
-
-
 [[introducao]]
 == INTRODUÇÃO
 
 [[finalidade]]
-== Finalidade
+=== Finalidade
 
-['Falar sobre a finalidade do projeto e como o mesmo foi idealizado']
+'Falar sobre a finalidade do projeto e como o mesmo foi idealizado'
 
 [[escopo]]
-== Escopo
+=== Escopo
 
-['Apresentar a finalidade da documentação apresentada']
+'Apresentar a finalidade da documentação apresentada'
 
 [[definicoes]]
-== Definições, Acrônimos e Abreviações
+=== Definições, Acrônimos e Abreviações
 
-['Falar sobre termos e convenções utilizadas para pessoas que possam não ter o conhecimento técnico']
+'Falar sobre termos e convenções utilizadas para pessoas que possam não ter o conhecimento técnico'
 
 [[referencias]]
-== Referências
+=== Referências
 
-['Referencias usadas para realizar a documentação']
+'Referencias usadas para realizar a documentação'
 
 [[representacao]]
 == REPRESENTAÇÃO ARQUITETURAL
 
-['Visão da arquitetura do documento junto a quais setores cada um e destinado']
+'Visão da arquitetura do documento junto a quais setores cada um e destinado'
 
 [[requisitos]]
 == REQUISITOS E RESTRIÇÕES ARQUITETURAIS
 
-['Especificar linguagem, plataforma e a segurança falando a necessidade e como poderia ocorrer']
+Especificar linguagem, plataforma e a segurança falando a necessidade e como poderia ocorrer.
 
 [[visaocasouso]]
 == VISÃO DE CASOS DE USO
 
-['Sessão que fala sobre os requerimentos principais do sistema(backbone) apresentando a descrição das mesmas e os casos de uso']
+Sessão que fala sobre os requerimentos principais do sistema(backbone) apresentando a descrição das mesmas e os casos de uso.
 
 [[casosusosig]]
-== Casos de Uso significantes para a arquitetura
+=== Casos de Uso significantes para a arquitetura
 
-['Apresentar casos de uso do backbone e o BPMN destes requisitos']
+Apresentar casos de uso do backbone e o BPMN destes requisitos.
 
 [[visaologica]]
 == VISÃO LÓGICA
