@@ -76,7 +76,7 @@ Apresentar casos de uso do backbone e o BPMN destes requisitos.
 [[aprovacao]]
 == Aprovação:
 
-.*Aprovações*
+*Aprovações*
 [options="header"]
 |===
 | Integrante | Assinatura | Data
