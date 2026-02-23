@@ -1,4 +1,4 @@
-= Nome do time - Nome do Projeto
+= MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
 Documento de Arquitetura de Software
 Versão 1.0
 :revnumber: v3.0
@@ -28,15 +28,26 @@ Versão 1.0
 [[introducao]]
 == INTRODUÇÃO
 
+  O presente documento tem como objetivo descrever o documento de arquitetura do 
+projeto MatchVagas. Este sistema tem como finalidade o aumento do índice de oportunidades no mercado de trabalho 
+no Brasil, mediante disseminação dos direitos dos usuarios e realização de campanhas que 
+podem ser compartilhadas nas redes sociais.
+
 [[finalidade]]
 === Finalidade
 
-'Falar sobre a finalidade do projeto e como o mesmo foi idealizado'
+  Este documento oferece uma visão arquitetural geral do sistema, usando diversas 
+visões arquiteturais para representar diferentes aspectos do mesmo. O objetivo deste 
+documento é capturar e comunicar as decisões arquiteturais significativas que foram 
+tomadas no decorrer do processo de desenvolvimento.
 
 [[escopo]]
 === Escopo
 
-'Apresentar a finalidade da documentação apresentada'
+  Este documento auxilia os envolvidos no projeto a captar aspectos arquiteturais do 
+sistema que são necessários para o desenvolvimento de uma solução que atenda às 
+necessidades dos usuários finais. Além de auxiliar no entendimento do sistema por novos 
+membros da equipe. 
 
 [[definicoes]]
 === Definições, Acrônimos e Abreviações
@@ -46,7 +57,8 @@ Versão 1.0
 [[referencias]]
 === Referências
 
-'Referencias usadas para realizar a documentação'
+==http://repositorio.aee.edu.br/bitstream/aee/1106/3/TCC2_2018_2_GabrielLeiteDias_MatheusLimadeAlbuquerque_Apendice2.pdf
+==https://www.cnj.jus.br/wp-content/uploads/2011/02/documento_de_arquitetura_de_software_projudi.pdf
 
 [[representacao]]
 == REPRESENTAÇÃO ARQUITETURAL
@@ -60,13 +72,35 @@ Especificar linguagem, plataforma e a segurança falando a necessidade e como po
 
 [[visaocasouso]]
 == VISÃO DE CASOS DE USO
+ “Diagrama de caso de uso”, faz uma ilusão de todos os casos de uso que o sistema atende. 
 
-Sessão que fala sobre os requerimentos principais do sistema(backbone) apresentando a descrição das mesmas e os casos de uso.
 
 [[casosusosig]]
-=== Casos de Uso significantes para a arquitetura
+A realizações de Casos de Uso citados acima estão sendo ilustrada abaixo respectivamente por meio de um  
+UML de diagrama de sequência.
 
-Apresentar casos de uso do backbone e o BPMN destes requisitos.
+5.1.1. - Cadastro de Usuários:
+   O diagrama proposto representa os passos o qual ao usuário, fará para realizar Efetuar o Cadastro.
+
+5.1.2 - Autenticação: O sistema deve permitir que usuários cadastrados realizem autenticação para acessar as funcionalidades conforme seu perfil.
+
+5.1.3 - Gerenciamento de Perfil do Candidato: O sistema deve permitir que candidatos autenticados gerenciem seu perfil, incluindo dados pessoais.
+
+5.1.4 - Gerenciamento de Perfil da Empresa: O sistema deve permitir que representantes de empresas ou recrutadores autenticados gerenciem o perfil da empresa.
+
+5.1.5 -  Cadastro de Vagas: O sistema deve permitir que empresas autenticadas cadastrem novas vagas de trabalho ou estágio.
+
+5.1.6 -  Manutenção de Vagas: O sistema deve permitir que empresas autenticadas realizem manutenção das vagas publicadas, incluindo edição, desativação ou remoção.
+
+5.1.7 - Busca e Filtragem de Vagas: Esta parte busca filtrar as vagas conforme as exigências das vagas e o perfil do candidato. O sistema deve recomendar vagas com compatibilidade ao perfil do usuário.
+
+5.1.8 - Candidatura à Vaga: O candidato se candidata às vagas de interesse com o currículo já cadastrado no sistema, podendo acessar as vagas existentes. Caso não esteja cadastrado, é direcionado para o cadastro no banco de vagas.
+
+5.1.9 - Acompanhamento de Candidaturas: O candidato acompanha a situação atual da sua candidatura às vagas, sendo informado sobre cada passo do processo seletivo, incluindo notificações sobre mudanças de status.
+
+
+5.1.10 - Administração do Sistema: O sistema deve fornecer funcionalidades administrativas para gestão global de usuários, vagas e conteúdos.
+
 
 [[visaologica]]
 == VISÃO LÓGICA
@@ -76,7 +110,7 @@ Apresentar casos de uso do backbone e o BPMN destes requisitos.
 [[aprovacao]]
 == Aprovação:
 
-.*Aprovações*
+*Aprovações*
 [options="header"]
 |===
 | Integrante | Assinatura | Data
