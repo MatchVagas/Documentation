@@ -1,9 +1,12 @@
 <mxfile host="65bd71144e">
     <diagram id="g4bvoXdk4ckn4wRoywBd" name="Página-1">
-        <mxGraphModel dx="1922" dy="467" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1642" dy="445" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
+                <mxCell id="189" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Diagrama de Classes - MatchVagas&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=310;gradientColor=none;fillColor=#FFFFFF;swimlaneFillColor=default;height=40;" vertex="1" parent="1">
+                    <mxGeometry x="-500" y="40" width="1420" height="1470" as="geometry"/>
+                </mxCell>
                 <mxCell id="5" style="edgeStyle=none;html=1;strokeColor=#333333;strokeWidth=2;endArrow=none;endFill=0;endSize=8;startArrow=none;startFill=0;startSize=8;labelBackgroundColor=#ffffff;labelBorderColor=#333333;" parent="1" source="89" target="103" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points"/>
