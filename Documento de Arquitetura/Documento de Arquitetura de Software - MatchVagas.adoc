@@ -239,7 +239,7 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 .Diagrama de Classes (Visão Lógica) 
 
 [#img-sunset,link=https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png] 
-image::sunset.jpg[Sunset,200,100]] 
+image::Diagrama de Classes[Diagrama de Classes - MatchVagas] 
 
 
 
