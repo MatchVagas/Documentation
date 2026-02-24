@@ -236,6 +236,9 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 . Administrador (herda de Usuário)
 * Pode realizar operações de gestão sobre usuários e vagas.
 
+
+=== Visão de Processos
+
 .Diagrama de Classes - MatchaVagas
 [#Diagrama-Classe,link=https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png]
 image::https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png[Diagrama,1024,1024]
