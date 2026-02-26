@@ -1,0 +1,254 @@
+= MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
+Documento de Arquitetura de Software
+Versão 1.0
+:revnumber: v3.0
+:revdate: 21/02/2026
+:author: Grupo MatchVagas
+:toc: auto
+:toclevels: 4
+:icons: font
+:numbered:
+:lang: pt-BR
+
+[cols="^,^", options="header"]
+|====
+| Gestor do projeto | Gerente do projeto
+| Romário Andrade | Lucas Dias
+|  | 
+|====
+
+== Histórico de Revisões
+
+[cols="^,^,^,<", options="header"]
+|====
+| Versão | Data | Descrição | Autor
+| 1.0 | 22/02/2026 | Elaboração inicial do Documento de Arquitetura | Romário Andrade, Lucas Dias, Yasmim Mendes
+|====
+
+[[introducao]]
+== INTRODUÇÃO
+[.text-justify]
+O presente documento tem como objetivo descrever o documento de arquitetura do projeto MatchVagas. Este sistema tem como finalidade o aumento do índice de oportunidades no mercado de trabalho no Brasil, mediante disseminação dos direitos dos usuarios e realização de campanhas que podem ser compartilhadas nas redes sociais.
+
+[[finalidade]]
+=== Finalidade
+[.text-justify]
+O Sistema MatchVagas é uma plataforma web que visa centralizar oportunidades de trabalho e estágio, facilitando o contato entre candidatos e empresas. O projeto foi idealizado para oferecer um ambiente intuitivo e seguro onde candidatos possam construir seus perfis, buscar vagas compatíveis e acompanhar candidaturas, enquanto empresas podem publicar e gerenciar suas vagas de forma eficiente. 
+
+Este documento oferece uma visão arquitetural geral do sistema, usando diversas visões arquiteturais para representar diferentes aspectos do mesmo. O objetivo deste documento é capturar e comunicar as decisões arquiteturais significativas que foram 
+tomadas no decorrer do processo de desenvolvimento.
+
+[[escopo]]
+=== Escopo
+[.text-justify]
+Este documento descreve a arquitetura de software do Sistema MatchVagas, abrangendo a estrutura de alto nível, os componentes principais, as interações entre eles e as decisões arquiteturais que atendem aos requisitos funcionais e não funcionais especificados. 
+Este documento auxilia os envolvidos no projeto a captar aspectos arquiteturais do sistema que são necessários para o desenvolvimento de uma solução que atenda às necessidades dos usuários finais. Além de auxiliar no entendimento do sistema por novos membros da equipe. 
+
+[[definicoes]]
+=== Definições, Acrônimos e Abreviações
+Para facilitar a compreensão, são listados os termos e abreviações utilizados neste documento:
+
+[cols="^,<", options="header"]
+|====
+| Termo/Abreviação | Definição
+| ERS | Especificação de Requisitos de Software
+| RF | Requisito Funcional
+| RNF | Requisito Não Funcional
+| LGPD | Lei Geral de Proteção de Dados
+| MVC | Model-View-Controller (padrão arquitetural)
+| REST | Representational State Transfer (estilo arquitetural para APIs)
+| ACID | Atomicidade, Consistência, Isolamento, Durabilidade (propriedades de transações)
+| WCAG | Web Content Accessibility Guidelines
+|====
+
+[[referencias]]
+=== Referências
+
+link:https://github.com/MatchVagas/Documentation/blob/feature/documento-arquitetura/DocumentoRequisitos/Documento%20de%20Requisitos%20MatchVagas.adoc[Documento de Requisitos do Sistema de Banco de Vagas de Trabalho e Estágio – MatchVagas, v3.0 (15/02/2026)]
+
+link:https://github.com/MatchVagas/Documentation/blob/feature/documento-arquitetura/Diagramas/Diagrama%20de%20Caso%20de%20Uso/Diagrama%20de%20Caso%20de%20Uso%20-%20MatchVagas.jpg[Diagrama de Caso de Uso – MatchVagas]
+
+link:https://www.w3.org/TR/WCAG21/[Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1]
+
+Engenharia de Software - Ian Sommerville, 10ª edição, Pearson, 2018.
+
+//==http://repositorio.aee.edu.br/bitstream/aee/1106/3/TCC2_2018_2_GabrielLeiteDias_MatheusLimadeAlbuquerque_Apendice2.pdf
+//==https://www.cnj.jus.br/wp-content/uploads/2011/02/documento_de_arquitetura_de_software_projudi.pdf
+
+[[representacao]]
+== REPRESENTAÇÃO ARQUITETURAL
+
+O Sistema MatchVagas adotará uma arquitetura cliente-servidor baseada na web, seguindo o estilo arquitetural de camadas (n-tier) para separar responsabilidades e facilitar a manutenção e evolução do sistema. A arquitetura é composta por três camadas principais:
+
+. *Camada de Apresentação (Frontend)*
+
+* Interface web responsiva, acessível via navegadores modernos (desktop e mobile).
+
+* Comunica-se com o backend por meio de requisições HTTP/HTTPS utilizando APIs REST.
+
+* Implementa as diretrizes de acessibilidade WCAG 2.1 nível AA.
+
+. *Camada de Negócio (Backend)*
+
+* Expõe uma API RESTful que encapsula a lógica de negócio e as regras do sistema.
+
+* Responsável por autenticação, autorização, validação de dados, orquestração dos processos (cadastro, busca, candidatura, etc.).
+
+* Implementa as medidas de segurança (hash de senhas, HTTPS, conformidade com LGPD).
+
+* Pode ser desenvolvida com frameworks como Spring Boot (Java), Django (Python) ou Node.js, garantindo modularidade e testabilidade.
+
+. *Camada de Dados (Banco de Dados)*
+
+* Banco de dados relacional (ex.: PostgreSQL, MySQL) que garante integridade referencial e suporte a transações ACID.
+
+* Armazena informações de usuários, perfis, vagas, candidaturas e logs administrativos.
+
+* Índices otimizados para consultas de busca e filtragem, visando o tempo de resposta inferior a 3 segundos.
+
+//A comunicação entre as camadas ocorre de forma segura (HTTPS) e stateless, utilizando tokens JWT para gerenciamento de sessão após autenticação. O sistema será hospedado em ambiente cloud com balanceamento de carga para garantir alta disponibilidade (99,5% no horário comercial).
+
+[[requisitos]]
+== REQUISITOS E RESTRIÇÕES ARQUITETURAIS
+
+A arquitetura deve atender aos seguintes requisitos e restrições, derivados principalmente dos requisitos não funcionais (RNF) e das necessidades do negócio:
+
+. Linguagem e Plataforma
+* Backend: Linguagem orientada a objetos com suporte a REST (Node.js, Java, Python ou C#).
+* Frontend: HTML5, CSS3, JavaScript (framework moderno como React, Vue ou Angular).
+* Banco de dados: Relacional (Mysql ou PostgreSQL).
+. Segurança
+* Todas as comunicações devem utilizar HTTPS (RNF003).
+* Senhas armazenadas com hash seguro (bcrypt) (RNF003).
+* Conformidade com a LGPD: coleta de consentimento, proteção de dados pessoais (RNF004).
+* Controle de acesso baseado em papéis (candidato, empresa, administrador).
+. Disponibilidade e Desempenho
+* Disponibilidade mínima de 99,5% no horário comercial (08h–20h) (RNF001).
+* Tempo de resposta para buscas, filtros e candidaturas inferior a 3 segundos (RNF002).
+* Estratégias de cache para consultas frequentes (ex.: listagem de vagas).
+. Integridade e Confiabilidade
+* Transações ACID para operações críticas (cadastro, candidatura) (RNF007).
+* Validação de dados em frontend e backend; impedir candidaturas duplicadas (RNF010).
+. Manutenibilidade e Evolução
+* Código fonte versionado com Git, seguindo boas práticas (Clean Code, padrões de projeto) (RNF008).
+* Documentação da API (ex.: OpenAPI/Swagger).
+. Acessibilidade e Usabilidade
+* Atender WCAG 2.1 nível AA (RNF005).
+* Design responsivo e intuitivo (RNF009).
+. Compatibilidade
+* Suporte aos navegadores mais recentes: Chrome, Firefox, Edge, Safari (RNF006).
+
+Essas restrições guiam a escolha de tecnologias, a definição da arquitetura de implantação e as práticas de desenvolvimento.
+
+[[visaocasouso]]
+== VISÃO DE CASOS DE USO
+
+A visão de casos de uso representa as funcionalidades principais do sistema sob a perspectiva dos atores. O diagrama de casos de uso do MatchVagas (fornecido em anexo) ilustra as interações entre candidatos, empresas/recrutadores e administradores.
+
+[[casosusosig]]
+Os principais casos de uso identificados são:
+
+Candidato::
+
+* Gerenciar perfil (dados pessoais, formação, experiências, currículo) – [RF003]
+
+* Buscar e filtrar vagas – [RF007]
+
+* Candidatar-se a vagas – [RF008]
+
+* Acompanhar candidaturas – [RF009]
+
+* Visualizar recomendações de vagas
+
+Empresa/Recrutador::
+
+* Gerenciar perfil da empresa – [RF004]
+
+* Cadastrar vagas – [RF005]
+
+* Manter vagas (editar, desativar, remover) – [RF006]
+
+* Visualizar candidaturas recebidas
+
+* Gerenciar processos seletivos
+
+Administrador::
+
+* Gerenciar usuários (criar, editar, bloquear) – [RF010]
+
+* Gerenciar vagas (moderar, remover)
+
+* Visualizar relatórios do sistema
+
+* Configurar parâmetros gerais
+
+=== Casos de Uso significantes para a arquitetura
+
+Alguns casos de uso têm impacto direto na arquitetura por envolverem alta complexidade, requisitos de desempenho ou integração com múltiplos componentes:
+
+Busca e Filtragem de Vagas [RF007]::
+Necessita de índices eficientes no banco de dados, possibilidade de uso de mecanismos de busca textual (ex.: Elasticsearch) para garantir desempenho e relevância. A arquitetura deve prever uma camada de busca otimizada que possa ser escalada horizontalmente.
+
+Cadastro e Autenticação [RF001, RF002]::
+Envolve segurança (hash de senha, proteção contra ataques), gerenciamento de sessões (JWT) e integração com a LGPD. A arquitetura deve separar claramente os serviços de autenticação e autorização.
+
+Candidatura e Acompanhamento [RF008, RF009]::
+Operações que exigem consistência transacional (evitar duplicidade) e notificações em tempo real (ou quase) sobre mudanças de status. Pode-se utilizar filas (message brokers) para processamento assíncrono de notificações.
+
+Administração do Sistema [RF010]::
+Funcionalidades que demandam interface específica e acesso a dados agregados (relatórios). A arquitetura deve prever a separação dos painéis administrativos dos fluxos comuns, garantindo segurança e isolamento.
+
+Esses casos de uso guiam a definição dos módulos e serviços da aplicação, bem como as decisões sobre escalabilidade e armazenamento.
+
+
+[[visaologica]]
+== VISÃO LÓGICA
+
+A visão lógica descreve as principais entidades de domínio e suas relações, organizadas em camadas. Abaixo estão as principais classes (ou agregados) que sustentam a aplicação:
+
+. Usuário (abstrata)
+
+* Atributos: id, nome, e-mail, senha (hash), tipo (candidato, empresa, admin), data de cadastro, status
+* Especializações: Candidato, Empresa, Administrador
+
+. Candidato
+
+* Atributos: CPF, data de nascimento, idade, telefone, endereço, currículo (arquivo ou texto)
+* Relacionamentos: um para muitos com Formacao, Experiencia, Candidatura
+
+. Empresa
+
+* Atributos: CNPJ, razão social, nome fantasia, descrição, porte, ramo, site, endereço, contato
+* Relacionamentos: um para muitos com Vaga
+
+. Vaga
+* Atributos: título, descrição, requisitos, tipo (trabalho/estágio), localidade, data de expiração, status (ativa/inativa), data de publicação
+* Relacionamentos: muitos para um com Empresa; um para muitos com Candidatura
+
+. Candidatura
+
+* Atributos: data da candidatura, status (em andamento, aprovada, rejeitada), histórico de alterações
+* Relacionamentos: muitos para um com Candidato e Vaga (garantindo unicidade por par candidato-vaga)
+* Formação e Experiência (agregados de Candidato)
+* Formação: instituição, curso, nível, ano de conclusão
+* Experiência: empresa, cargo, período, descrição
+
+. Administrador (herda de Usuário)
+* Pode realizar operações de gestão sobre usuários e vagas.
+
+
+=== Visão de Processos
+
+.Diagrama de Classes - MatchaVagas
+[#Diagrama-Classe,link=https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png]
+image::https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png[Diagrama,1024,1024]
+
+[[aprovacao]]
+== Aprovação:
+
+*Aprovações*
+[options="header"]
+|===
+| Integrante | Assinatura | Data
+| | |
+|===
