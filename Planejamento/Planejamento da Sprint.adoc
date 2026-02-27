@@ -80,5 +80,5 @@ Critérios que todos os itens devem atender para serem considerados concluídos:
 
 |===
 | Versão | Data | Autor | Alterações
-| 1.0 | {docdate} | [Nome] | Criação do documento
+| 1.0 | {docdate} | Romário Andrade | Criação do documento
 |===

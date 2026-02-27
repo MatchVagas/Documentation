@@ -89,5 +89,5 @@ Definições de termos importantes para o entendimento do backlog.
 
 |===
 | Versão | Data | Autor | Alterações
-| 1.0 | {docdate} | [Nome] | Criação do documento
+| 1.0 | {docdate} | Romário Andrade | Criação do documento
 |===
