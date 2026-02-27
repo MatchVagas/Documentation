@@ -8,7 +8,7 @@
 
 == Informações Gerais
 
-- **Produto:** [Nome do Produto]
+- **Produto:** MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
 - **Product Owner:** [Nome]
 - **Última atualização:** {docdate}
 - **Versão do Backlog:** 1.0
@@ -26,9 +26,11 @@ Agrupamento de funcionalidades em grandes áreas ou temas de negócio. Eles ajud
 
 |===
 | Épico | Descrição
-| [Ex: Gestão de Usuários] | [Funcionalidades relacionadas a cadastro, login, perfil]
-| [Ex: Tarefas] | [Criação, edição, exclusão e acompanhamento de tarefas]
-| [Ex: Relatórios] | [Geração de gráficos e estatísticas de produtividade]
+| Autenticação e Perfil| [Funcionalidades relacionadas a cadastro, login, perfil]
+| Gerenciamento de Vagas | [Criação, edição, exclusão e acompanhamento de tarefas]
+| Busca e Candidatura | [Geração de gráficos e estatísticas de produtividade]
+| Administração | [Geração de gráficos e estatísticas de produtividade]
+|Requisitos do Sistema|[alguma coisa]
 |===
 
 == Backlog Priorizado
