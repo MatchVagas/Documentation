@@ -1,0 +1,93 @@
+= Backlog do Produto
+:author: [Romário / Equipe MatchVagas]
+:revnumber: 1.0
+:revdate: {docdate}
+:toc: auto
+:toclevels: 2
+:icons: font
+
+== Informações Gerais
+
+- **Produto:** MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
+- **Product Owner:** [Nome]
+- **Última atualização:** {docdate}
+- **Versão do Backlog:** 1.0
+
+== Visão Geral do Produto
+
+[Descreva brevemente o propósito do produto, seus principais objetivos e público-alvo. Esta seção ajuda a contextualizar os itens do backlog.]
+
+Exemplo:
+"O sistema tem como objetivo facilitar a gestão de tarefas pessoais, permitindo que usuários criem, organizem e acompanhem suas atividades diárias de forma intuitiva."
+
+== Épicos / Temas
+
+Agrupamento de funcionalidades em grandes áreas ou temas de negócio. Eles ajudam a organizar o backlog em categorias de alto nível.
+
+|===
+| Épico | Descrição
+| Autenticação e Perfil| [Funcionalidades relacionadas a cadastro, login, perfil]
+| Gerenciamento de Vagas | [Criação, edição, exclusão e acompanhamento de tarefas]
+| Busca e Candidatura | [Geração de gráficos e estatísticas de produtividade]
+| Administração | [Geração de gráficos e estatísticas de produtividade]
+|Requisitos do Sistema|[alguma coisa]
+|===
+
+== Backlog Priorizado
+
+Lista de todos os itens (histórias de usuário, funcionalidades, melhorias, bugs) que compõem o produto, ordenados por prioridade (do mais importante para o menos importante).
+
+[NOTE]
+====
+*Prioridades:*  
+- **Alta** – Deve ser implementado nas próximas sprints.  
+- **Média** – Importante, mas pode aguardar algumas iterações.  
+- **Baixa** – Desejável, será feito quando houver disponibilidade.  
+====
+
+|===
+| ID | Título / Descrição | Prioridade | Estimativa (Story Points) | Status | Observações
+| US-001 | Como usuário, quero me cadastrar no sistema para ter minha conta pessoal. | Alta | 5 | A Fazer | Critérios de aceitação definidos no documento anexo.
+| US-002 | Como usuário, quero fazer login com e-mail e senha. | Alta | 3 | A Fazer | -
+| US-003 | Como usuário, quero criar uma nova tarefa com título, descrição e data de vencimento. | Alta | 8 | Em análise | Depende da definição do layout.
+| US-004 | Como usuário, quero visualizar a lista de minhas tarefas pendentes. | Média | 5 | A Fazer | -
+| US-005 | Como usuário, quero marcar uma tarefa como concluída. | Média | 3 | A Fazer | -
+| US-006 | Como usuário, quero editar uma tarefa existente. | Média | 3 | A Fazer | -
+| US-007 | Como usuário, quero excluir uma tarefa. | Baixa | 2 | A Fazer | -
+| BUG-001 | Corrigir erro de validação de e-mail no cadastro. | Alta | 2 | Em andamento | Identificado nos testes de homologação.
+| US-008 | Como usuário, quero receber um lembrete por e-mail para tarefas próximas do vencimento. | Baixa | 8 | Backlog | Aguardando definição de infraestrutura de e-mail.
+|===
+
+== Critérios de Priorização
+
+[Explique como as prioridades são definidas – por exemplo, com base no valor de negócio, urgência, dependências técnicas, risco, feedback de stakeholders, etc.]
+
+- **Valor de negócio:** funcionalidades que trazem mais retorno para o cliente/usuário.
+- **Urgência:** prazos legais, contratuais ou oportunidades de mercado.
+- **Dependências:** itens que desbloqueiam outras entregas.
+- **Risco técnico:** funcionalidades que exigem validação de viabilidade.
+
+== Itens Técnicos e Dívida Técnica
+
+Itens que não são visíveis para o usuário final, mas necessários para manter a qualidade e sustentabilidade do produto.
+
+|===
+| ID | Descrição | Prioridade | Estimativa | Observações
+| TEC-001 | Atualizar biblioteca de segurança X para versão mais recente. | Média | 3 | Correção de vulnerabilidade.
+| TEC-002 | Refatorar módulo de autenticação para melhor performance. | Baixa | 5 | Melhoria interna.
+|===
+
+== Glossário
+
+Definições de termos importantes para o entendimento do backlog.
+
+* **Story Points:** Unidade de medida relativa para estimar o esforço de implementação de uma história.
+* **Épico:** Uma grande funcionalidade que pode ser desmembrada em várias histórias menores.
+* **Critérios de Aceitação:** Condições que uma história deve satisfazer para ser considerada pronta.
+
+== Histórico de Revisão
+
+|===
+| Versão | Data | Autor | Alterações
+| 1.0 | {docdate} | Romário Andrade | Criação do documento
+|===

@@ -1,0 +1,84 @@
+= Planejamento de Sprint - MatchVagas
+:author: MatchVagas / Romário,Lucas e Yasmim
+:revnumber: 1.0
+:revdate: {docdate}
+:toc: auto
+:toclevels: 2
+:icons: font
+
+== Informações Gerais
+
+- **Projeto:** [Nome do Projeto]
+- **Sprint:** [Número ou Nome da Sprint]
+- **Período:** [Data Início] a [Data Fim]
+- **Product Owner:** [Nome]
+- **Scrum Master:** [Nome]
+- **Time de Desenvolvimento:** [Lista de nomes / papéis]
+
+== Objetivo da Sprint
+
+[Resuma o propósito principal desta Sprint. O que se espera entregar? Qual o tema ou meta de negócio?]
+
+*Objetivo:* [Ex.: "Entregar a funcionalidade de login e autenticação, permitindo que usuários se cadastrem e acessem o sistema com segurança."]
+
+== Backlog da Sprint
+
+Lista de itens selecionados para esta Sprint, priorizados pelo Product Owner e com estimativas do time.
+
+|===
+| ID | História / Tarefa | Prioridade | Estimativa (Pontos/Horas) | Responsável
+| 1  | [Descrição sucinta] | Alta | 5 | [Nome]
+| 2  | [Descrição sucinta] | Média | 3 | [Nome]
+| 3  | [Descrição sucinta] | Baixa | 2 | [Nome]
+|===
+
+*Notas:* [Observações adicionais sobre o backlog, como critérios de aceitação importantes, links para documentos, etc.]
+
+== Capacidade do Time
+
+- Total de horas/pontos disponíveis na Sprint: [XX]
+- Férias / ausências previstas: [Listar se houver]
+- Feriados no período: [Listar]
+
+== Definição de Pronto (Definition of Done - DoD)
+
+Critérios que todos os itens devem atender para serem considerados concluídos:
+
+* Código revisado por pelo menos um par
+* Testes unitários escritos e aprovados
+* Testes de integração realizados
+* Documentação atualizada (se aplicável)
+* Funcionalidade validada pelo Product Owner
+* Nenhum defeito crítico em aberto
+* [Outros critérios específicos do projeto]
+
+== Riscos e Dependências
+
+|===
+| Risco / Dependência | Impacto | Plano de Mitigação / Ação
+| [Descrição do risco] | [Alto/Médio/Baixo] | [Como reduzir ou evitar]
+| [Dependência de outra equipe] | [Alto/Médio/Baixo] | [Comunicação, alinhamento]
+|===
+
+== Compromissos e Acordos
+
+- Horário das cerimônias diárias (Daily Scrum): [Horário e local/meet]
+- Quem participa de cada cerimônia
+- Ferramentas de acompanhamento (Jira, Trello, etc.)
+- [Outros acordos do time]
+
+== Aprovações
+
+|===
+| Papel | Nome | Data | Assinatura
+| Product Owner | [Nome] | [Data] | _
+| Scrum Master | [Nome] | [Data] | _
+| Time | [Nome(s)] | [Data] | _
+|===
+
+== Histórico de Revisão
+
+|===
+| Versão | Data | Autor | Alterações
+| 1.0 | {docdate} | Romário Andrade | Criação do documento
+|===
