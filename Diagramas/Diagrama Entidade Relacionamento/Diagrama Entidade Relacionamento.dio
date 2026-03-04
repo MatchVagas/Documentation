@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="y_0ZVhJI34hhxAG2yOuz" name="DER MatchVagas">
-        <mxGraphModel dx="2684" dy="690" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#FFFFFF" math="0" shadow="0">
+        <mxGraphModel dx="2748" dy="878" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#FFFFFF" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -418,7 +418,7 @@
                     <mxGeometry y="104" width="140" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="G_ZbP7HpT1JkhkRU93YC-24" value="empresas" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffe6cc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;rounded=0;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="-280" y="446" width="140" height="208" as="geometry"/>
+                    <mxGeometry x="-230" y="446" width="140" height="208" as="geometry"/>
                 </mxCell>
                 <mxCell id="G_ZbP7HpT1JkhkRU93YC-25" value="🔑 cnpj" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fillColor=default;" parent="G_ZbP7HpT1JkhkRU93YC-24" vertex="1">
                     <mxGeometry y="26" width="140" height="26" as="geometry"/>
@@ -496,7 +496,7 @@
                     <mxGeometry y="442" width="140" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="G_ZbP7HpT1JkhkRU93YC-50" value="administradores" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffe6cc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;rounded=0;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="-280" y="210" width="140" height="130" as="geometry"/>
+                    <mxGeometry x="-230" y="210" width="140" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="G_ZbP7HpT1JkhkRU93YC-51" value="🔑 id" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fillColor=default;" parent="G_ZbP7HpT1JkhkRU93YC-50" vertex="1">
                     <mxGeometry y="26" width="140" height="26" as="geometry"/>
@@ -665,8 +665,8 @@
                         <mxPoint x="470" y="660" as="sourcePoint"/>
                         <mxPoint x="570" y="560" as="targetPoint"/>
                         <Array as="points">
-                            <mxPoint x="-80" y="498"/>
-                            <mxPoint x="-80" y="530"/>
+                            <mxPoint x="30" y="498"/>
+                            <mxPoint x="30" y="530"/>
                             <mxPoint x="570" y="530"/>
                             <mxPoint x="570" y="581"/>
                         </Array>
