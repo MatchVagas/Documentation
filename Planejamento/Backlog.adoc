@@ -1,7 +1,7 @@
 = Backlog do Produto
-:author: [Romário / Equipe MatchVagas]
+:author: Romário Andrade / Equipe MatchVagas
 :revnumber: 1.0
-:revdate: {docdate}
+:revdate: 2026-03-16
 :toc: auto
 :toclevels: 2
 :icons: font
@@ -9,85 +9,94 @@
 == Informações Gerais
 
 - **Produto:** MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
-- **Product Owner:** [Nome]
-- **Última atualização:** {docdate}
+- **Product Owner:** [A definir]
+- **Última atualização:** 2026-03-16
 - **Versão do Backlog:** 1.0
 
 == Visão Geral do Produto
 
-[Descreva brevemente o propósito do produto, seus principais objetivos e público-alvo. Esta seção ajuda a contextualizar os itens do backlog.]
-
-Exemplo:
-"O sistema tem como objetivo facilitar a gestão de tarefas pessoais, permitindo que usuários criem, organizem e acompanhem suas atividades diárias de forma intuitiva."
+O MatchVagas é uma plataforma web que centraliza oportunidades de trabalho e estágio, facilitando o contato entre candidatos e empresas. O sistema permite que candidatos construam perfis, busquem vagas compatíveis e acompanhem candidaturas, enquanto empresas podem publicar e gerenciar suas vagas de forma eficiente. O objetivo é aumentar o índice de oportunidades no mercado de trabalho brasileiro, com foco em usabilidade, segurança e conformidade com a LGPD.
 
 == Épicos / Temas
 
-Agrupamento de funcionalidades em grandes áreas ou temas de negócio. Eles ajudam a organizar o backlog em categorias de alto nível.
+Os épicos representam grandes áreas funcionais do sistema, agrupando histórias relacionadas.
 
 |===
 | Épico | Descrição
-| Autenticação e Perfil| [Funcionalidades relacionadas a cadastro, login, perfil]
-| Gerenciamento de Vagas | [Criação, edição, exclusão e acompanhamento de tarefas]
-| Busca e Candidatura | [Geração de gráficos e estatísticas de produtividade]
-| Administração | [Geração de gráficos e estatísticas de produtividade]
-|Requisitos do Sistema|[alguma coisa]
+| Autenticação e Perfil | Funcionalidades de cadastro, login e gerenciamento de perfis de candidatos e empresas.
+| Gerenciamento de Vagas | Criação, edição, desativação e remoção de vagas por parte das empresas.
+| Busca e Candidatura | Busca avançada, filtros, candidatura a vagas e acompanhamento de processos seletivos.
+| Administração | Gestão de usuários, moderação de vagas, relatórios e configurações globais.
+| Requisitos do Sistema | Itens técnicos e não funcionais (segurança, desempenho, acessibilidade, etc.).
 |===
 
 == Backlog Priorizado
 
-Lista de todos os itens (histórias de usuário, funcionalidades, melhorias, bugs) que compõem o produto, ordenados por prioridade (do mais importante para o menos importante).
+Lista de histórias de usuário e itens técnicos priorizados. As prioridades seguem a classificação: **Alta** (essencial para o MVP), **Média** (importante, mas pode ser entregue em sprints seguintes) e **Baixa** (desejável para versões futuras).
 
 [NOTE]
 ====
-*Prioridades:*  
-- **Alta** – Deve ser implementado nas próximas sprints.  
-- **Média** – Importante, mas pode aguardar algumas iterações.  
-- **Baixa** – Desejável, será feito quando houver disponibilidade.  
+*Critérios de priorização:*  
+- **Valor de negócio:** funcionalidades que atendem diretamente às necessidades dos usuários.  
+- **Dependências:** itens que desbloqueiam outras entregas.  
+- **Risco técnico:** funcionalidades que exigem validação de viabilidade.  
 ====
 
 |===
 | ID | Título / Descrição | Prioridade | Estimativa (Story Points) | Status | Observações
-| US-001 | Como usuário, quero me cadastrar no sistema para ter minha conta pessoal. | Alta | 5 | A Fazer | Critérios de aceitação definidos no documento anexo.
-| US-002 | Como usuário, quero fazer login com e-mail e senha. | Alta | 3 | A Fazer | -
-| US-003 | Como usuário, quero criar uma nova tarefa com título, descrição e data de vencimento. | Alta | 8 | Em análise | Depende da definição do layout.
-| US-004 | Como usuário, quero visualizar a lista de minhas tarefas pendentes. | Média | 5 | A Fazer | -
-| US-005 | Como usuário, quero marcar uma tarefa como concluída. | Média | 3 | A Fazer | -
-| US-006 | Como usuário, quero editar uma tarefa existente. | Média | 3 | A Fazer | -
-| US-007 | Como usuário, quero excluir uma tarefa. | Baixa | 2 | A Fazer | -
-| BUG-001 | Corrigir erro de validação de e-mail no cadastro. | Alta | 2 | Em andamento | Identificado nos testes de homologação.
-| US-008 | Como usuário, quero receber um lembrete por e-mail para tarefas próximas do vencimento. | Baixa | 8 | Backlog | Aguardando definição de infraestrutura de e-mail.
+| US-001 | Como candidato ou empresa, quero me cadastrar no sistema informando nome, e-mail, senha e tipo de usuário, para ter uma conta pessoal. | Alta | 5 | A Fazer | RF001. Critérios: validação de e-mail único, senha com hash, consentimento LGPD.
+| US-002 | Como usuário cadastrado, quero fazer login com e-mail e senha para acessar as funcionalidades do meu perfil. | Alta | 3 | A Fazer | RF002. Utilizar JWT para sessão stateless.
+| US-003 | Como candidato, quero gerenciar meu perfil (dados pessoais, formação, experiências, currículo) para me candidatar a vagas de forma completa. | Alta | 8 | A Fazer | RF003. Incluir upload de currículo em PDF.
+| US-004 | Como empresa, quero gerenciar o perfil da minha empresa (razão social, descrição, porte, ramo, contato) para publicar vagas com credibilidade. | Alta | 5 | A Fazer | RF004.
+| US-005 | Como empresa, quero cadastrar novas vagas de trabalho ou estágio com título, descrição, requisitos, tipo e localidade, para atrair candidatos. | Alta | 8 | A Fazer | RF005. Validação de dados obrigatórios.
+| US-006 | Como empresa, quero editar, desativar ou remover vagas que publiquei, para manter as informações atualizadas. | Média | 5 | A Fazer | RF006. Apenas o proprietário da vaga pode alterar.
+| US-007 | Como candidato, quero buscar e filtrar vagas por palavras-chave, localidade, tipo, idade e outros critérios, para encontrar oportunidades compatíveis com meu perfil. | Alta | 13 | A Fazer | RF007. Necessário índices eficientes; pode exigir busca textual (Elasticsearch).
+| US-008 | Como candidato, quero me candidatar a uma vaga utilizando meu currículo cadastrado, para participar do processo seletivo. | Alta | 5 | A Fazer | RF008. Impedir candidaturas duplicadas.
+| US-009 | Como candidato, quero acompanhar o status das minhas candidaturas (em andamento, aprovada, rejeitada) e receber notificações sobre mudanças, para saber o andamento. | Média | 8 | A Fazer | RF009. Pode usar filas para notificações assíncronas.
+| US-010 | Como administrador, quero gerenciar usuários (bloquear, editar) e vagas (moderar, remover), além de visualizar relatórios, para manter a integridade do sistema. | Média | 8 | A Fazer | RF010. Painel administrativo separado.
+| US-011 | Como candidato, quero receber recomendações de vagas baseadas no meu perfil e histórico, para facilitar a descoberta de oportunidades. | Baixa | 8 | Backlog | Funcionalidade desejável, pode usar algoritmo de matching.
+| US-012 | Como empresa, quero visualizar as candidaturas recebidas para cada vaga e gerenciar o processo seletivo, para selecionar candidatos. | Média | 5 | A Fazer | Complemento ao RF009.
+|===
+
+== Itens Técnicos e Dívida Técnica
+
+Itens não funcionais e tarefas técnicas necessárias para garantir qualidade, segurança e desempenho.
+
+|===
+| ID | Descrição | Prioridade | Estimativa | Observações
+| TEC-001 | Implementar hash seguro de senhas com bcrypt. | Alta | 3 | RNF003.
+| TEC-002 | Configurar HTTPS em todas as comunicações. | Alta | 2 | RNF003.
+| TEC-003 | Garantir conformidade com LGPD: coleta de consentimento, política de privacidade e proteção de dados. | Alta | 5 | RNF004.
+| TEC-004 | Implementar acessibilidade WCAG 2.1 nível AA (navegação por teclado, contraste, leitores de tela). | Média | 8 | RNF005.
+| TEC-005 | Garantir compatibilidade com navegadores recentes (Chrome, Firefox, Edge, Safari) em desktop e mobile. | Média | 3 | RNF006.
+| TEC-006 | Utilizar transações ACID em operações críticas (cadastro, candidatura) no banco de dados relacional. | Alta | 5 | RNF007.
+| TEC-007 | Adotar boas práticas de código (Clean Code, padrões de projeto) e versionamento com Git. | Média | 3 | RNF008.
+| TEC-008 | Projetar interface intuitiva e responsiva, com fluxos claros para cada perfil. | Alta | 8 | RNF009. Deve ser considerado no design das US.
+| TEC-009 | Prevenir candidaturas duplicadas e validar dados de entrada em frontend e backend. | Alta | 3 | RNF010.
+| TEC-010 | Garantir disponibilidade de 99,5% no horário comercial (08h–20h) com balanceamento de carga e ambiente cloud. | Alta | - | RNF001. Meta de infraestrutura.
+| TEC-011 | Otimizar tempo de resposta para buscas e filtros (<3s) com índices e caching. | Alta | 8 | RNF002. Pode envolver Elasticsearch ou similar.
+| TEC-012 | Documentar a API com OpenAPI/Swagger. | Média | 3 | Boa prática.
+| TEC-013 | Configurar ambiente de homologação e CI/CD. | Média | 5 | Para garantir manutenibilidade.
 |===
 
 == Critérios de Priorização
 
-[Explique como as prioridades são definidas – por exemplo, com base no valor de negócio, urgência, dependências técnicas, risco, feedback de stakeholders, etc.]
-
-- **Valor de negócio:** funcionalidades que trazem mais retorno para o cliente/usuário.
-- **Urgência:** prazos legais, contratuais ou oportunidades de mercado.
-- **Dependências:** itens que desbloqueiam outras entregas.
-- **Risco técnico:** funcionalidades que exigem validação de viabilidade.
-
-== Itens Técnicos e Dívida Técnica
-
-Itens que não são visíveis para o usuário final, mas necessários para manter a qualidade e sustentabilidade do produto.
-
-|===
-| ID | Descrição | Prioridade | Estimativa | Observações
-| TEC-001 | Atualizar biblioteca de segurança X para versão mais recente. | Média | 3 | Correção de vulnerabilidade.
-| TEC-002 | Refatorar módulo de autenticação para melhor performance. | Baixa | 5 | Melhoria interna.
-|===
+- **Valor de negócio:** funcionalidades que resolvem dores reais dos usuários (candidatos e empresas) e são essenciais para o funcionamento do sistema.
+- **Urgência:** requisitos legais (LGPD) e de segurança têm prioridade máxima.
+- **Dependências:** itens que são pré-requisitos para outros (ex.: cadastro antes de candidatura).
+- **Risco técnico:** funcionalidades complexas (busca avançada) podem exigir provas de conceito antecipadas.
 
 == Glossário
 
-Definições de termos importantes para o entendimento do backlog.
-
-* **Story Points:** Unidade de medida relativa para estimar o esforço de implementação de uma história.
-* **Épico:** Uma grande funcionalidade que pode ser desmembrada em várias histórias menores.
-* **Critérios de Aceitação:** Condições que uma história deve satisfazer para ser considerada pronta.
+- **Story Points:** Unidade relativa de esforço para implementar uma história (valores: 1, 2, 3, 5, 8, 13...).
+- **Épico:** Conjunto de histórias relacionadas a uma grande funcionalidade.
+- **Critérios de Aceitação:** Condições que a história deve satisfazer para ser considerada concluída.
+- **RF:** Requisito Funcional (conforme Documento de Requisitos).
+- **RNF:** Requisito Não Funcional.
 
 == Histórico de Revisão
 
 |===
 | Versão | Data | Autor | Alterações
-| 1.0 | {docdate} | Romário Andrade | Criação do documento
+| 1.0 | 2026-03-16 | Romário Andrade | Criação do backlog com base no Documento de Requisitos v3.0 e Documento de Arquitetura.
 |===
