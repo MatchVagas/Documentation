@@ -1,0 +1,134 @@
+= Backlog do Produto – MatchVagas
+:author: Equipe MatchVagas
+:revnumber: 2.0
+:revdate: 2026-02-18
+:toc: auto
+:toclevels: 2
+:icons: font
+
+== Informações Gerais
+
+* **Produto:** MatchVagas – Sistema de Banco de Vagas de Trabalho e Estágio
+* **Product Owner:** [A definir]
+* **Última atualização:** 2026-02-18
+* **Versão do Backlog:** 2.0 (baseada no ERS v3.0)
+
+== Visão Geral do Produto
+
+O MatchVagas é uma plataforma web que conecta candidatos a oportunidades de trabalho e estágio, centralizando a divulgação de vagas, a gestão de candidaturas e o acompanhamento do processo seletivo. O sistema atende três perfis principais: **Candidato**, **Empresa/Recrutador** e **Administrador**, proporcionando uma experiência intuitiva, segura e em conformidade com a LGPD.
+
+== Épicos / Temas
+
+|===
+| Épico | Descrição
+| **Autenticação e Perfil** | Funcionalidades de cadastro, login e gerenciamento de perfis de Candidato e Empresa.
+| **Gerenciamento de Vagas** | Criação, edição, desativação e exclusão de vagas por parte das empresas.
+| **Busca e Candidatura** | Busca com filtros, recomendação de vagas, candidatura e acompanhamento de status.
+| **Administração do Sistema** | Painel administrativo para gestão global de usuários, vagas e conteúdos.
+| **Fundações Técnicas e Conformidade** | Itens de infraestrutura, segurança, acessibilidade e conformidade legal (RNFs).
+|===
+
+== Backlog Priorizado
+
+[NOTE]
+====
+*Prioridades:*
+*   **Alta** – Essencial para o MVP, deve ser implementado nas primeiras sprints.
+*   **Média** – Importante para a operação satisfatória, pode ser planejado após o núcleo funcional.
+*   **Baixa** – Desejável, agrega valor mas não bloqueia o lançamento inicial.
+====
+
+|===
+| ID | Título / Descrição (História de Usuário) | Prioridade | Estimativa (SP) | Status | Observações / Critérios de Aceitação
+
+.4+^.^| **Épico: Autenticação e Perfil**
+| US‑001 | **Como** visitante (Candidato ou Empresa), **quero** me cadastrar no sistema informando nome, e‑mail, senha, tipo de usuário, CPF/CNPJ e data de nascimento, **para** criar minha conta e acessar as funcionalidades exclusivas. | **Alta** | 5 | A Fazer | * RF001. +
+Validação de CPF/CNPJ. Consentimento LGPD obrigatório.
+| US‑002 | **Como** usuário cadastrado, **quero** realizar login com e‑mail e senha, **para** acessar minha área restrita conforme meu perfil (Candidato/Empresa/Admin). | **Alta** | 3 | A Fazer | * RF002. +
+Bloqueio temporário após 5 tentativas inválidas.
+| US‑003 | **Como** Candidato autenticado, **quero** gerenciar meu perfil pessoal (dados de contato, formação acadêmica, experiências profissionais e upload de currículo), **para** que as empresas conheçam minhas qualificações. | **Alta** | 8 | A Fazer | * RF003. +
+Upload de arquivos PDF/DOCX. Visualização prévia do currículo.
+| US‑004 | **Como** Empresa/Recrutador autenticado, **quero** gerenciar o perfil da minha organização (razão social, descrição, ramo, contato e endereço), **para** que os candidatos conheçam a empresa antes de se candidatar. | **Alta** | 5 | A Fazer | * RF004. +
+Validação de CNPJ e endereço.
+
+.4+^.^| **Épico: Gerenciamento de Vagas**
+| US‑005 | **Como** Empresa/Recrutador, **quero** cadastrar uma nova vaga (título, descrição, requisitos, tipo, local, data de expiração), **para** divulgar oportunidades de trabalho ou estágio. | **Alta** | 8 | A Fazer | * RF005. +
+Campo "requisitos" com tags. Vaga fica ativa imediatamente.
+| US‑006 | **Como** Empresa/Recrutador, **quero** editar uma vaga já publicada, **para** corrigir informações ou ajustar requisitos. | **Média** | 3 | A Fazer | * RF006. +
+Alterações refletidas em tempo real nas buscas.
+| US‑007 | **Como** Empresa/Recrutador, **quero** desativar ou excluir uma vaga, **para** retirá‑la das buscas quando a oportunidade for preenchida ou cancelada. | **Média** | 2 | A Fazer | * RF006. +
+Confirmação de exclusão. Vagas desativadas não aparecem nas buscas.
+
+.4+^.^| **Épico: Busca e Candidatura**
+| US‑008 | **Como** Candidato, **quero** buscar vagas por palavras‑chave, área, localidade, tipo (trabalho/estágio) e idade compatível, **para** encontrar oportunidades alinhadas ao meu perfil. | **Alta** | 13 | A Fazer | * RF007. +
+Filtros dinâmicos. Paginação de resultados.
+| US‑009 | **Como** Candidato, **quero** visualizar uma lista de vagas recomendadas com base no meu perfil e histórico de candidaturas, **para** descobrir oportunidades relevantes mais rapidamente. | **Média** | 8 | Backlog | * RF007 (recomendação). +
+Algoritmo simples baseado em tags de perfil e descrição da vaga.
+| US‑010 | **Como** Candidato, **quero** candidatar‑me a uma vaga utilizando meu currículo já cadastrado, **para** demonstrar interesse de forma rápida e organizada. | **Alta** | 5 | A Fazer | * RF008. +
+Impedir candidatura duplicada. Exibir mensagem de confirmação.
+| US‑011 | **Como** Candidato, **quero** acompanhar o status das minhas candidaturas (ex: "recebida", "em análise", "entrevista", "finalizada") e receber notificações por e‑mail sobre mudanças, **para** estar sempre informado sobre o andamento dos processos. | **Alta** | 8 | A Fazer | * RF009. +
+Notificações opcionais (configuração de preferências).
+
+.3+^.^| **Épico: Administração do Sistema**
+| US‑012 | **Como** Administrador, **quero** visualizar, bloquear ou excluir qualquer usuário (Candidato ou Empresa), **para** manter a integridade e segurança da plataforma. | **Média** | 5 | A Fazer | * RF010. +
+Filtro por nome/e‑mail. Ação registrada em log.
+| US‑013 | **Como** Administrador, **quero** aprovar, editar ou remover qualquer vaga publicada, **para** garantir que o conteúdo esteja de acordo com as políticas da plataforma. | **Média** | 5 | A Fazer | * RF010. +
+Painel com vagas pendentes (se moderação for ativada).
+| US‑014 | **Como** Administrador, **quero** acessar um dashboard com métricas (total de usuários, vagas ativas, candidaturas realizadas), **para** acompanhar o crescimento e uso da plataforma. | **Baixa** | 8 | Backlog | * Expansão do RF010.
+
+.5+^.^| **Épico: Fundações Técnicas e Conformidade**
+| TEC‑001 | **Implementar** hash seguro de senhas (bcrypt) e comunicação exclusivamente via HTTPS. | **Alta** | 3 | A Fazer | * RNF003. +
+Item técnico obrigatório antes do primeiro deploy público.
+| TEC‑002 | **Adequar** sistema à LGPD: consentimento explícito no cadastro, política de privacidade acessível, opção de exportação/exclusão de dados pessoais. | **Alta** | 8 | A Fazer | * RNF004. +
+Envolve ajustes de front‑end e back‑end.
+| TEC‑003 | **Garantir** que operações críticas (cadastro, candidatura) utilizem transações ACID para manter integridade dos dados. | **Alta** | 3 | A Fazer | * RNF007. +
+Revisão de código nas respectivas funcionalidades.
+| TEC‑004 | **Otimizar** consultas e implementar cache básico para que buscas e filtragens retornem em < 3 segundos (condições normais). | **Média** | 5 | A Fazer | * RNF002. +
+Monitoramento de performance com ferramenta de APM.
+| TEC‑005 | **Adequar** interface às diretrizes WCAG 2.1 AA: navegação por teclado, contraste adequado, labels para leitores de tela. | **Média** | 13 | Backlog | * RNF005. +
+Será desenvolvido gradualmente após MVP.
+| TEC‑006 | **Garantir** compatibilidade com versões recentes de Chrome, Firefox, Edge e Safari (desktop/mobile). | **Média** | 5 | Em andamento | * RNF006. +
+Testes manuais básicos serão executados a cada sprint.
+| TEC‑007 | **Adotar** padrões de Clean Code, documentação de API e versionamento Git com fluxo Git Flow. | **Média** | 3 | A Fazer | * RNF008. +
+Acordo de equipe; revisão de código obrigatória.
+| TEC‑008 | **Refinar** usabilidade com testes de usuário e implementar design responsivo mobile‑first. | **Média** | 8 | Backlog | * RNF009. +
+Depende de protótipos validados.
+| TEC‑009 | **Implementar** validações de negócio: impedir candidatura duplicada, validar CPF/CNPJ, sanitizar entradas contra XSS/SQL Injection. | **Alta** | 8 | Em andamento | * RNF010 e segurança geral. +
+Será aplicado transversalmente nas histórias de usuário.
+|===
+
+== Critérios de Priorização
+
+A priorização foi baseada nos seguintes fatores:
+
+* **Valor para o negócio e usuário final:** Funcionalidades que entregam o núcleo da proposta de valor (conexão candidato‑vaga) receberam prioridade **Alta**.
+* **Dependências técnicas:** Itens como cadastro, login e publicação de vagas são pré‑requisitos para histórias subsequentes.
+* **Conformidade legal e segurança:** Requisitos como LGPD (RNF004) e autenticação segura (RNF003) são **Altos** e inegociáveis.
+* **Estabilidade e integridade:** Transações ACID (RNF007) e prevenção de duplicidades (RNF010) são igualmente críticos.
+
+Itens de **Média** prioridade representam melhorias importantes para a experiência do usuário, mas que podem ser refinadas após a entrega do fluxo principal. Itens de **Baixa** são desejáveis e serão considerados em versões futuras.
+
+== Itens Técnicos e Dívida Técnica (Detalhamento adicional)
+
+Além dos itens já listados no backlog principal, as seguintes atividades contínuas devem ser observadas:
+
+|===
+| ID | Descrição | Responsável | Periodicidade
+| TEC‑DOC‑01 | Manter documento de arquitetura atualizado (escolha de stack, modelo de dados). | Tech Lead | Sob demanda
+| TEC‑DOC‑02 | Atualizar este backlog com novas histórias identificadas durante as sprints. | PO / Scrum Master | A cada sprint
+|===
+
+== Glossário
+
+* **Story Points:** Unidade relativa que mede esforço, complexidade e incerteza. Escala de Fibonacci (1, 2, 3, 5, 8, 13...).
+* **Épico:** Conjunto de histórias de usuário relacionadas a um mesmo tema de negócio.
+* **Critérios de Aceitação:** Condições que uma história deve satisfazer para ser considerada "Pronta" (Done).
+* **MVP:** Minimum Viable Product – versão com funcionalidades essenciais para o lançamento inicial.
+
+== Histórico de Revisão
+
+|===
+| Versão | Data | Autor | Alterações
+| 1.0 | 2026-02-10 | Romário Andrade | Criação do template inicial.
+| 2.0 | 2026-02-18 | Equipe MatchVagas | Preenchimento com base no ERS v3.0; priorização e expansão de histórias e itens técnicos.
+|===
