@@ -23,6 +23,7 @@ Versão 1.0
 |====
 | Versão | Data | Descrição | Autor
 | 1.0 | 22/02/2026 | Elaboração inicial do Documento de Arquitetura | Romário Andrade, Lucas Dias, Yasmim Mendes
+| 2.0 | 11/05/2026 | Adição do fluxo de aprovação de empresa e atualização da entidade Empresa | Romário Andrade
 |====
 
 [[introducao]]
@@ -176,6 +177,8 @@ Administrador::
 
 * Gerenciar usuários (criar, editar, bloquear) – [RF010]
 
+* *Aprovar ou rejeitar cadastros de empresas* – [RF004, RF010]
+
 * Gerenciar vagas (moderar, remover)
 
 * Visualizar relatórios do sistema
@@ -218,8 +221,9 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 
 . Empresa
 
-* Atributos: CNPJ, razão social, nome fantasia, descrição, porte, ramo, site, endereço, contato
+* Atributos: CNPJ, razão social, nome fantasia, descrição, porte, ramo, site, endereço, contato, *status (PENDENTE | APROVADA | REJEITADA)*
 * Relacionamentos: um para muitos com Vaga
+* *Fluxo de aprovação*: ao ser criada por um usuário do tipo EMPRESA, a entidade recebe status `PENDENTE`. O administrador pode aprovar (`APROVADA`) ou rejeitar (`REJEITADA`) o cadastro. Apenas empresas com status `APROVADA` aparecem nas listagens públicas. Quando o próprio administrador cria a empresa, o status inicial é `APROVADA`.
 
 . Vaga
 * Atributos: título, descrição, requisitos, tipo (trabalho/estágio), localidade, data de expiração, status (ativa/inativa), data de publicação
@@ -234,7 +238,8 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 * Experiência: empresa, cargo, período, descrição
 
 . Administrador (herda de Usuário)
-* Pode realizar operações de gestão sobre usuários e vagas.
+* Pode realizar operações de gestão sobre usuários, vagas, candidaturas e empresas.
+* Responsável por aprovar ou rejeitar cadastros de empresas, controlando quais perfis ficam visíveis na plataforma.
 
 
 === Visão de Processos

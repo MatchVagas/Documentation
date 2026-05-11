@@ -1,7 +1,7 @@
 = Backlog do Produto – MatchVagas
 :author: Equipe MatchVagas
-:revnumber: 2.0
-:revdate: 2026-02-18
+:revnumber: 3.0
+:revdate: 2026-05-11
 :toc: auto
 :toclevels: 2
 :icons: font
@@ -10,8 +10,8 @@
 
 * **Produto:** MatchVagas – Sistema de Banco de Vagas de Trabalho e Estágio
 * **Product Owner:** [A definir]
-* **Última atualização:** 2026-02-18
-* **Versão do Backlog:** 2.0 (baseada no ERS v3.0)
+* **Última atualização:** 2026-05-11
+* **Versão do Backlog:** 3.0 (baseada no ERS v4.0)
 
 == Visão Geral do Produto
 
@@ -48,8 +48,9 @@ Validação de CPF/CNPJ. Consentimento LGPD obrigatório.
 Bloqueio temporário após 5 tentativas inválidas.
 | US‑003 | **Como** Candidato autenticado, **quero** gerenciar meu perfil pessoal (dados de contato, formação acadêmica, experiências profissionais e upload de currículo), **para** que as empresas conheçam minhas qualificações. | **Alta** | 8 | A Fazer | * RF003. +
 Upload de arquivos PDF/DOCX. Visualização prévia do currículo.
-| US‑004 | **Como** Empresa/Recrutador autenticado, **quero** gerenciar o perfil da minha organização (razão social, descrição, ramo, contato e endereço), **para** que os candidatos conheçam a empresa antes de se candidatar. | **Alta** | 5 | A Fazer | * RF004. +
-Validação de CNPJ e endereço.
+| US‑004 | **Como** Empresa/Recrutador autenticado, **quero** gerenciar o perfil da minha organização (razão social, descrição, ramo, contato e endereço), **para** que os candidatos conheçam a empresa antes de se candidatar. | **Alta** | 5 | Concluído | * RF004. +
+Validação de CNPJ e endereço. +
+Ao cadastrar, o perfil recebe status *PENDENTE* e aguarda aprovação do administrador. Empresa visualiza seu próprio perfil em qualquer status via `GET /api/empresas/minha-empresa`.
 
 .4+^.^| **Épico: Gerenciamento de Vagas**
 | US‑005 | **Como** Empresa/Recrutador, **quero** cadastrar uma nova vaga (título, descrição, requisitos, tipo, local, data de expiração), **para** divulgar oportunidades de trabalho ou estágio. | **Alta** | 8 | A Fazer | * RF005. +
@@ -69,12 +70,16 @@ Impedir candidatura duplicada. Exibir mensagem de confirmação.
 | US‑011 | **Como** Candidato, **quero** acompanhar o status das minhas candidaturas (ex: "recebida", "em análise", "entrevista", "finalizada") e receber notificações por e‑mail sobre mudanças, **para** estar sempre informado sobre o andamento dos processos. | **Alta** | 8 | A Fazer | * RF009. +
 Notificações opcionais (configuração de preferências).
 
-.3+^.^| **Épico: Administração do Sistema**
+.4+^.^| **Épico: Administração do Sistema**
 | US‑012 | **Como** Administrador, **quero** visualizar, bloquear ou excluir qualquer usuário (Candidato ou Empresa), **para** manter a integridade e segurança da plataforma. | **Média** | 5 | A Fazer | * RF010. +
 Filtro por nome/e‑mail. Ação registrada em log.
 | US‑013 | **Como** Administrador, **quero** aprovar, editar ou remover qualquer vaga publicada, **para** garantir que o conteúdo esteja de acordo com as políticas da plataforma. | **Média** | 5 | A Fazer | * RF010. +
 Painel com vagas pendentes (se moderação for ativada).
 | US‑014 | **Como** Administrador, **quero** acessar um dashboard com métricas (total de usuários, vagas ativas, candidaturas realizadas), **para** acompanhar o crescimento e uso da plataforma. | **Baixa** | 8 | Backlog | * Expansão do RF010.
+| US‑015 | **Como** Administrador, **quero** visualizar os cadastros de empresas pendentes de aprovação e aprovar ou rejeitar cada um, **para** garantir que apenas organizações legítimas operem na plataforma. | **Alta** | 5 | Concluído | * RF004 + RF010. +
+Endpoints: `GET /api/admin/empresas/pendentes`, `PATCH /api/admin/empresas/{id}/aprovar`, `PATCH /api/admin/empresas/{id}/rejeitar`. +
+Empresas PENDENTE e REJEITADA não aparecem nas listagens públicas. +
+Administrador que cria uma empresa diretamente já a cria com status APROVADA.
 
 .5+^.^| **Épico: Fundações Técnicas e Conformidade**
 | TEC‑001 | **Implementar** hash seguro de senhas (bcrypt) e comunicação exclusivamente via HTTPS. | **Alta** | 3 | A Fazer | * RNF003. +
@@ -131,4 +136,5 @@ Além dos itens já listados no backlog principal, as seguintes atividades cont�
 | Versão | Data | Autor | Alterações
 | 1.0 | 2026-02-10 | Romário Andrade | Criação do template inicial.
 | 2.0 | 2026-02-18 | Equipe MatchVagas | Preenchimento com base no ERS v3.0; priorização e expansão de histórias e itens técnicos.
+| 3.0 | 2026-05-11 | Romário Andrade | Adição da US-015 (aprovação de empresa pelo admin); atualização de US-004 para status PENDENTE; marcação de US-004 e US-015 como Concluído.
 |===
