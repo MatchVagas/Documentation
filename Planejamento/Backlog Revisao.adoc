@@ -1,0 +1,139 @@
+= Backlog do Produto — MatchVagas
+:revnumber: v4.0
+:revdate: 26/07/2026
+:author: Grupo MatchVagas
+:toc: auto
+:numbered:
+:lang: pt-BR
+
+== Informações gerais
+
+[cols="<,<", options="header"]
+|===
+| Item | Valor
+| Produto | Sistema MatchVagas
+| Baseline normativa | ERS v5.1
+| Situação | Candidata; requer aprovação por pull request
+| Regra de estado | O estado de implementação deve ser confirmado por evidência de código ou teste
+|===
+
+Este arquivo é o backlog canônico. Versões anteriores permanecem apenas no histórico do Git e não devem ser usadas para planejamento corrente.
+
+== Critérios de priorização
+
+* *P0 — Bloqueador*: segurança, integridade, legalidade ou fluxo essencial incorreto.
+* *P1 — Alta*: requisito essencial ou importante necessário para fechar a baseline.
+* *P2 — Média*: qualidade, governança ou evolução que não bloqueia o fluxo principal.
+* *Estado — A validar*: não há evidência suficiente nesta revisão documental.
+* *Estado — Revisar*: existe comportamento documentado que precisa ser corrigido ou confirmado.
+* *Estado — Aceito*: somente após evidência de teste vinculada na matriz de rastreabilidade.
+
+== Backlog priorizado
+
+[cols="^1,^1,^1,^1,^1,<5", options="header"]
+|===
+| ID | Épico | RF | Prioridade | Estado | História e critério de aceite
+
+| US001 | Identidade | RF001 | P0 | Revisar
+| Como visitante, quero criar conta de candidato ou empresa. +
+*Aceite:* o cadastro público rejeita ADMIN; promoção administrativa exige autorização e auditoria.
+
+| US002 | Identidade | RF002 | P0 | Revisar
+| Como usuário, quero autenticar e encerrar minha sessão com comportamento previsível. +
+*Aceite:* duração do JWT, rotação, expiração e efeito real do logout estão documentados e testados.
+
+| US003 | Candidato | RF003 | P1 | A validar
+| Como candidato, quero manter perfil e currículo com meus dados profissionais. +
+*Aceite:* validações, formatos, propriedade dos dados e ciclo de exclusão estão definidos.
+
+| US004 | Empresa | RF004 | P1 | A validar
+| Como representante, quero cadastrar e manter uma empresa sujeita à aprovação. +
+*Aceite:* apenas empresa aprovada fica pública e apta a publicar vagas; o modelo de recrutadores é decidido.
+
+| US005 | Vagas | RF005 | P0 | Revisar
+| Como empresa aprovada, quero cadastrar vaga sem escolher arbitrariamente seu estado inicial. +
+*Aceite:* servidor define o estado; campos etários ficam suspensos até validação jurídica.
+
+| US006 | Vagas | RF006 | P0 | Revisar
+| Como empresa, quero editar, pausar e encerrar vagas próprias sem destruir o histórico. +
+*Aceite:* vaga com candidatura não é excluída fisicamente e transições são auditadas.
+
+| US007 | Descoberta | RF007 | P0 | Revisar
+| Como visitante, quero buscar somente vagas elegíveis. +
+*Aceite:* retorno padrão contém vagas ativas, não expiradas e de empresas aprovadas, com paginação documentada.
+
+| US008 | Candidaturas | RF008 | P0 | Revisar
+| Como candidato, quero candidatar-me uma única vez a uma vaga elegível. +
+*Aceite:* backend valida elegibilidade e unicidade candidato–vaga.
+
+| US009 | Candidaturas | RF009 | P0 | Revisar
+| Como empresa, quero conduzir candidaturas recebidas por transições permitidas. +
+*Aceite:* empresa altera apenas candidaturas próprias; histórico registra estado anterior/novo, ator, data e motivo.
+
+| US010 | Administração | RF010 | P1 | Revisar
+| Como administrador, quero gerir o sistema com ações autorizadas e auditáveis. +
+*Aceite:* operações destrutivas definem retenção, soft delete quando aplicável e trilha de auditoria.
+
+| US011 | Privacidade | RF011 | P0 | Revisar
+| Como candidato, quero controlar os dados compartilhados em cada candidatura. +
+*Aceite:* campos não autorizados são omitidos; finalidade, data e versão da política ficam registradas.
+
+| US012 | Recomendação | RF012 | P1 | A validar
+| Como candidato, quero receber recomendações explicáveis de vagas elegíveis. +
+*Aceite:* score 0–100, critérios, pesos, limiar, desempate e exclusões são versionados; idade não participa sem validação jurídica.
+
+| US013 | Localização | RF013 | P1 | A validar
+| Como usuário, quero selecionar localizações de uma hierarquia consistente. +
+*Aceite:* país–estado–cidade respeita integridade referencial e exclusões não quebram registros dependentes.
+
+| US014 | Referências | RF014 | P1 | A validar
+| Como administrador, quero manter tabelas de referência usadas pelo sistema. +
+*Aceite:* endpoints, enums, UML e banco adotam a mesma representação e protegem referências existentes.
+
+| US015 | Direitos do titular | RF015 | P0 | A validar
+| Como titular, quero exercer acesso, correção, exportação, revogação e eliminação quando aplicável. +
+*Aceite:* solicitação possui protocolo, validação de identidade, responsável, prazo, resposta e exceção de retenção.
+|===
+
+== Itens técnicos e de governança
+
+[cols="^1,^1,<4,<4", options="header"]
+|===
+| ID | Prioridade | Ação | Critério de aceite
+| GOV-01 | P0 | Reconciliar `main` e `dev` e manter mapa documental no README | Branch canônica e versões resolvem sem ambiguidade
+| TRC-01 | P0 | Manter matriz RF–US–UC–endpoint–entidade–teste | Todos os RFs têm linha e responsável pela lacuna
+| ARC-01 | P1 | Atualizar arquitetura para o estado real | Componentes atuais e futuros estão explicitamente separados
+| DAT-01 | P0 | Reconciliar UML, DER, DDL e seed | Nomes, tipos, FKs, unicidade e retenção coincidem
+| QA-01 | P1 | Automatizar build AsciiDoc, links e lint | PR falha quando documento não renderiza ou referência quebra
+| SEC-01 | P0 | Validar autorização e auditoria administrativa | Cadastro público nunca cria ADMIN
+| LEG-01 | P0 | Validar filtro etário e tratamento de dados | Parecer ou decisão registrada antes de habilitar o comportamento
+|===
+
+== Decisões pendentes
+
+* Um usuário EMPRESA representa uma única empresa ou haverá múltiplos recrutadores por empresa?
+* Quais superfícies estão implementadas: web, aplicativos móveis e/ou API pública?
+* Redis, Kafka e Elasticsearch são atuais ou roadmap?
+* Qual política de retenção vale para usuários, vagas, candidaturas e auditoria?
+* Qual fórmula de match está efetivamente implementada e aprovada?
+* Quais estados e transições são permitidos para vaga e candidatura?
+
+== Definição de pronto
+
+Um item somente pode ser marcado como *Aceito* quando:
+
+. o ERS e o backlog concordam;
+. o caso de uso ou fluxo equivalente está atualizado;
+. endpoint e entidade estão identificados;
+. teste de aceitação possui evidência;
+. impactos de segurança, privacidade e dados foram avaliados;
+. a matriz de rastreabilidade aponta para as versões corretas.
+
+== Histórico de revisão
+
+[cols="^,^,<,<", options="header"]
+|===
+| Data | Versão | Descrição | Autor
+| 11/05/2026 | v3.0 | Revisão anterior baseada no ERS v4.0 | Grupo MatchVagas
+| 26/07/2026 | v4.0 | Unificação do backlog, alinhamento ao ERS v5.1 e inclusão de RF011–RF015 | Grupo MatchVagas
+|===

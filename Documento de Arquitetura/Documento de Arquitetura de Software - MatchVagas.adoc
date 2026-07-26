@@ -1,8 +1,8 @@
 = MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio
 Documento de Arquitetura de Software
-Versão 1.0
-:revnumber: v3.0
-:revdate: 21/02/2026
+Versão 3.1
+:revnumber: v3.1
+:revdate: 26/07/2026
 :author: Grupo MatchVagas
 :toc: auto
 :toclevels: 4
@@ -23,12 +23,14 @@ Versão 1.0
 |====
 | Versão | Data | Descrição | Autor
 | 1.0 | 22/02/2026 | Elaboração inicial do Documento de Arquitetura | Romário Andrade, Lucas Dias, Yasmim Mendes
+| 2.0 | 11/05/2026 | Adição do fluxo de aprovação de empresa e atualização da entidade Empresa | Romário Andrade
+| 3.1 | 26/07/2026 | Correção da baseline, alinhamento ao ERS v5.1 e separação entre implementação confirmada, decisões pendentes e roadmap | Grupo MatchVagas
 |====
 
 [[introducao]]
 == INTRODUÇÃO
 [.text-justify]
-O presente documento tem como objetivo descrever o documento de arquitetura do projeto MatchVagas. Este sistema tem como finalidade o aumento do índice de oportunidades no mercado de trabalho no Brasil, mediante disseminação dos direitos dos usuarios e realização de campanhas que podem ser compartilhadas nas redes sociais.
+Este documento descreve a arquitetura do MatchVagas, sistema de vagas de trabalho e estágio que conecta candidatos, empresas e administradores. A revisão v3.1 registra apenas tecnologias sustentadas pelos artefatos atuais e marca explicitamente decisões pendentes e componentes de roadmap.
 
 [[finalidade]]
 === Finalidade
@@ -64,11 +66,11 @@ Para facilitar a compreensão, são listados os termos e abreviações utilizado
 [[referencias]]
 === Referências
 
-link:https://github.com/MatchVagas/Documentation/blob/feature/documento-arquitetura/DocumentoRequisitos/Documento%20de%20Requisitos%20MatchVagas.adoc[Documento de Requisitos do Sistema de Banco de Vagas de Trabalho e Estágio – MatchVagas, v3.0 (15/02/2026)]
+link:../Documento%20de%20Requisitos/Documento%20de%20Requisitos%20MatchVagas.adoc[Especificação de Requisitos do MatchVagas — ERS v5.1]
 
-link:https://github.com/MatchVagas/Documentation/blob/feature/documento-arquitetura/Diagramas/Diagrama%20de%20Caso%20de%20Uso/Diagrama%20de%20Caso%20de%20Uso%20-%20MatchVagas.jpg[Diagrama de Caso de Uso – MatchVagas]
+link:../Diagramas/[Diagramas do MatchVagas]
 
-link:https://www.w3.org/TR/WCAG21/[Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1]
+link:https://www.w3.org/TR/WCAG22/[Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.2]
 
 Engenharia de Software - Ian Sommerville, 10ª edição, Pearson, 2018.
 
@@ -78,6 +80,20 @@ Engenharia de Software - Ian Sommerville, 10ª edição, Pearson, 2018.
 [[representacao]]
 == REPRESENTAÇÃO ARQUITETURAL
 
+=== Estado dos componentes
+
+[cols="<,^,^,<", options="header"]
+|====
+| Componente/decisão | Situação | Evidência | Observação
+| API REST e regras de negócio | Confirmado | ERS v5.1 e implementação declarada | Java/Spring, Spring Security 6, JWT e bcrypt
+| Cliente web | A confirmar | Documento anterior | Framework, repositório e versão suportada ainda não registrados
+| Aplicativos móveis | A confirmar | Material de apresentação | Não representar como implantados sem evidência
+| Banco relacional | A confirmar | ERS e diagramas divergentes | Definir uma única tecnologia canônica
+| Redis | FUTURO/A confirmar | Diagrama arquitetural | Não usar para “sessões” sem reconciliar JWT stateless
+| Kafka e workers | FUTURO/A confirmar | Diagrama arquitetural | Documentar eventos, consumidores e garantias antes de promover
+| Elasticsearch | FUTURO/A confirmar | Diagrama e roadmap | Definir fonte de verdade, indexação e consistência
+|====
+
 O Sistema MatchVagas adotará uma arquitetura cliente-servidor baseada na web, seguindo o estilo arquitetural de camadas (n-tier) para separar responsabilidades e facilitar a manutenção e evolução do sistema. A arquitetura é composta por três camadas principais:
 
 . *Camada de Apresentação (Frontend)*
@@ -86,7 +102,7 @@ O Sistema MatchVagas adotará uma arquitetura cliente-servidor baseada na web, s
 
 * Comunica-se com o backend por meio de requisições HTTP/HTTPS utilizando APIs REST.
 
-* Implementa as diretrizes de acessibilidade WCAG 2.1 nível AA.
+* Implementa as diretrizes de acessibilidade WCAG 2.2 nível AA.
 
 . *Camada de Negócio (Backend)*
 
@@ -96,11 +112,11 @@ O Sistema MatchVagas adotará uma arquitetura cliente-servidor baseada na web, s
 
 * Implementa as medidas de segurança (hash de senhas, HTTPS, conformidade com LGPD).
 
-* Pode ser desenvolvida com frameworks como Spring Boot (Java), Django (Python) ou Node.js, garantindo modularidade e testabilidade.
+* A implementação declarada utiliza Java/Spring Boot; alternativas de linguagem não fazem parte desta baseline.
 
 . *Camada de Dados (Banco de Dados)*
 
-* Banco de dados relacional (ex.: PostgreSQL, MySQL) que garante integridade referencial e suporte a transações ACID.
+* Banco de dados relacional com integridade referencial e transações ACID. A tecnologia concreta deve ser confirmada e registrada antes da aprovação, pois os artefatos atuais divergem entre MySQL e PostgreSQL.
 
 * Armazena informações de usuários, perfis, vagas, candidaturas e logs administrativos.
 
@@ -114,9 +130,9 @@ O Sistema MatchVagas adotará uma arquitetura cliente-servidor baseada na web, s
 A arquitetura deve atender aos seguintes requisitos e restrições, derivados principalmente dos requisitos não funcionais (RNF) e das necessidades do negócio:
 
 . Linguagem e Plataforma
-* Backend: Linguagem orientada a objetos com suporte a REST (Node.js, Java, Python ou C#).
-* Frontend: HTML5, CSS3, JavaScript (framework moderno como React, Vue ou Angular).
-* Banco de dados: Relacional (Mysql ou PostgreSQL).
+* Backend: Java/Spring Boot, conforme implementação declarada no ERS v5.1.
+* Frontend: tecnologia a confirmar; registrar repositório, framework e versão suportada.
+* Banco de dados: relacional; selecionar e documentar uma única tecnologia canônica.
 . Segurança
 * Todas as comunicações devem utilizar HTTPS (RNF003).
 * Senhas armazenadas com hash seguro (bcrypt) (RNF003).
@@ -133,10 +149,10 @@ A arquitetura deve atender aos seguintes requisitos e restrições, derivados pr
 * Código fonte versionado com Git, seguindo boas práticas (Clean Code, padrões de projeto) (RNF008).
 * Documentação da API (ex.: OpenAPI/Swagger).
 . Acessibilidade e Usabilidade
-* Atender WCAG 2.1 nível AA (RNF005).
+* Atender WCAG 2.2 nível AA com critérios ligados a testes (RNF005).
 * Design responsivo e intuitivo (RNF009).
 . Compatibilidade
-* Suporte aos navegadores mais recentes: Chrome, Firefox, Edge, Safari (RNF006).
+* Publicar matriz por release e testar a versão atual e anterior de Chrome, Firefox, Edge e Safari (RNF006).
 
 Essas restrições guiam a escolha de tecnologias, a definição da arquitetura de implantação e as práticas de desenvolvimento.
 
@@ -175,6 +191,8 @@ Empresa/Recrutador::
 Administrador::
 
 * Gerenciar usuários (criar, editar, bloquear) – [RF010]
+
+* *Aprovar ou rejeitar cadastros de empresas* – [RF004, RF010]
 
 * Gerenciar vagas (moderar, remover)
 
@@ -218,8 +236,9 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 
 . Empresa
 
-* Atributos: CNPJ, razão social, nome fantasia, descrição, porte, ramo, site, endereço, contato
+* Atributos: CNPJ, razão social, nome fantasia, descrição, porte, ramo, site, endereço, contato, *status (PENDENTE | APROVADA | REJEITADA)*
 * Relacionamentos: um para muitos com Vaga
+* *Fluxo de aprovação*: ao ser criada por um usuário do tipo EMPRESA, a entidade recebe status `PENDENTE`. O administrador pode aprovar (`APROVADA`) ou rejeitar (`REJEITADA`) o cadastro. Apenas empresas com status `APROVADA` aparecem nas listagens públicas. Quando o próprio administrador cria a empresa, o status inicial é `APROVADA`.
 
 . Vaga
 * Atributos: título, descrição, requisitos, tipo (trabalho/estágio), localidade, data de expiração, status (ativa/inativa), data de publicação
@@ -234,14 +253,15 @@ A visão lógica descreve as principais entidades de domínio e suas relações,
 * Experiência: empresa, cargo, período, descrição
 
 . Administrador (herda de Usuário)
-* Pode realizar operações de gestão sobre usuários e vagas.
+* Pode realizar operações de gestão sobre usuários, vagas, candidaturas e empresas.
+* Responsável por aprovar ou rejeitar cadastros de empresas, controlando quais perfis ficam visíveis na plataforma.
 
 
 === Visão de Processos
 
-.Diagrama de Classes - MatchaVagas
+.Diagrama de Classes — MatchVagas
 [#Diagrama-Classe,link=https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png]
-image::https://raw.githubusercontent.com/MatchVagas/Documentation/d53eb461389690fcb4825bfce1417a7213f44a81/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png[Diagrama,1024,1024]
+image::https://raw.githubusercontent.com/MatchVagas/Documentation/refs/heads/dev/Diagramas/Diagrama%20de%20Classes/Diagrama%20de%20Classes.png[Diagrama,1024,1024]
 
 [[aprovacao]]
 == Aprovação:

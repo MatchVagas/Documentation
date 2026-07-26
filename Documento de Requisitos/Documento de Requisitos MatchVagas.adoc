@@ -1,6 +1,6 @@
-= Documento de Requisitos do Sistema MatchVagas - Sistema de Banco de Vagas de Trabalho e Estágio -
-:revnumber: v3.0
-:revdate: 15/02/2026
+= Documento de Requisitos do Sistema MatchVagas — Banco de Vagas de Trabalho e Estágio
+:revnumber: v5.1
+:revdate: 26/07/2026
 :author: Grupo MatchVagas
 :toc: auto
 :toclevels: 4
@@ -13,10 +13,13 @@
 [cols="^,^,^,<", options="header"]
 |====
 | Data | Versão | Descrição | Autor
-| 06/02/2026 | v1.0 | Elaboração do primeira versão deste documento | Romário Andrade
-| 10/02/2026 | v2.0 | Adicionado o campo idade no requisito filtro de vagas - [RF001] | Lucas dias
+| 06/02/2026 | v1.0 | Elaboração da primeira versão deste documento | Romário Andrade
+| 10/02/2026 | v2.0 | Adicionado o campo idade no requisito filtro de vagas - [RF001] | Lucas Dias
 | 11/02/2026 | v2.0 | Adicionar requisitos na filtragem de vagas - [RF007] | Lucas Dias
 | 12/02/2026 | v3.0 | Adição da descrição de vários requisitos | Yasmim Mendes
+| 11/05/2026 | v4.0 | Adição do fluxo de aprovação de empresa pelo administrador — [RF004] e [RF010] | Romário Andrade
+| 11/05/2026 | v5.0 | Revisão geral para refletir o backend implementado: atualização de RF001–RF010; adição de RF011 (privacidade), RF012 (sugestões), RF013 (localização) e RF014 (tabelas de referência) | Romário Andrade
+| 26/07/2026 | v5.1 | Correção de regras críticas de segurança, elegibilidade de vagas, ciclo de candidaturas, privacidade e critérios verificáveis | Grupo MatchVagas
 |====
 
 == Introdução
@@ -25,235 +28,740 @@
 Este documento tem como objetivo especificar de forma clara, completa e verificável os requisitos do Sistema de Banco de Vagas de Trabalho e Estágio, servindo como referência para clientes, desenvolvedores, testadores e demais partes interessadas.
 
 === Especificação de Requisitos de Software
-O documento de requisitos descreve os requisitos funcionais e não funcionais que o sistema deve atender. Ele apresenta os seguintes tópicos listados abaixo:
+O documento de requisitos descreve os requisitos funcionais e não funcionais que o sistema deve atender, apresentando os seguintes tópicos:
 
-* Descrição geral do sistema: apresenta uma visão geral do sistema, caracterizando qual é o seu escopo e descrevendo seus usuários.
-* Requisitos funcionais: especificam todos os requisitos funcionais do sistema, descrevendo os fluxos de eventos, prioridades, atores, entradas e saídas de cada caso de uso a ser implementado.
+* *Descrição geral do sistema*: visão geral do escopo e dos usuários.
+* *Requisitos funcionais*: descrevem os fluxos de eventos, prioridades, atores, entradas e saídas de cada funcionalidade implementada.
+* *Requisitos não funcionais*: descrevem restrições de qualidade, desempenho, segurança e conformidade legal.
 
 === Escopo do Sistema
-O sistema permitirá o cadastro, divulgação e gerenciamento de vagas de trabalho e estágio, bem como o cadastro de candidatos e empresas, possibilitando candidaturas e acompanhamento do processo.
+O sistema permitirá o cadastro, divulgação e gerenciamento de vagas de trabalho e estágio, bem como o cadastro de candidatos e empresas, possibilitando candidaturas e acompanhamento do processo seletivo de forma segura e em conformidade com a LGPD.
 
 Principais benefícios:
 
 * Seu primeiro emprego ou estágio começa aqui.
 * Centralização das oportunidades de trabalho e estágio.
-* Facilitação do processo de candidatura.
+* Facilitação do processo de candidatura com controle de privacidade.
 * Apoio ao recrutamento por parte das empresas.
+* Sugestão inteligente de vagas compatíveis com o perfil do candidato.
 
 === Convenções, termos e abreviações
-A correta interpretação deste documento exige o conhecimento de algumas convenções e termos específicos, que são descritos a seguir.
 
 [cols="^,<", options="header"]
 |====
-| Termos e Abreviações | Definições
+| Termo / Abreviação | Definição
 | ERS | Especificação de Requisitos de Software
 | RF | Requisito Funcional
 | RNF | Requisito Não Funcional
 | LGPD | Lei Geral de Proteção de Dados
+| JWT | JSON Web Token — mecanismo de autenticação stateless utilizado pelo sistema
+| API | Application Programming Interface — interface REST exposta pelo backend
+| CNPJ | Cadastro Nacional de Pessoa Jurídica
+| CPF | Cadastro de Pessoa Física
+|====
+
+== Referências
+
+* Documento de Arquitetura de Software — MatchVagas, v2.0 (11/05/2026)
+* Backlog do Produto — MatchVagas, v3.0 (11/05/2026)
+* Engenharia de Software — Ian Sommerville, 10ª edição, Pearson, 2018
+
+== Descrição Geral do Sistema
+
+=== Perspectiva do Produto
+O sistema é uma aplicação web independente com arquitetura cliente-servidor. O backend expõe uma API RESTful (Spring Boot 3 / Java 21) com autenticação via JWT stateless. O banco de dados é relacional (PostgreSQL/MySQL) com garantias ACID.
+
+=== Funções do Produto
+* Cadastro e autenticação de usuário com perfil por tipo (CANDIDATO, EMPRESA, ADMIN).
+* Gerenciamento completo de perfis: candidatos (formação, experiência, currículo), empresas (com fluxo de aprovação) e administradores.
+* Cadastro, manutenção e busca/filtragem de vagas de trabalho e estágio.
+* Candidatura a vagas com controle granular de privacidade (LGPD).
+* Acompanhamento de candidaturas pelo candidato e pelo recrutador, com visões separadas.
+* Sugestão automática de vagas compatíveis com o perfil do candidato.
+* Administração global: usuários, vagas, candidaturas, empresas (aprovação/rejeição) e estatísticas.
+* Gestão de dados de localização (países, estados, cidades) e tabelas de referência do sistema.
+
+=== Descrição dos Usuários
+
+[cols="^,<,<", options="header"]
+|====
+| Perfil | Descrição | Acesso
+| *CANDIDATO* | Busca vagas, se candidata e acompanha processos seletivos | Perfil próprio, vagas (leitura pública), candidaturas próprias
+| *EMPRESA* | Publica e gerencia vagas; analisa candidaturas recebidas | Perfil próprio (sujeito a aprovação), vagas da empresa, candidaturas recebidas
+| *ADMIN* | Gestão global do sistema | Acesso total a todos os recursos
 |====
 
 == Requisitos
 
 === Identificação dos Requisitos
-Os requisitos do sistema, por convenção, serão referenciados por meio da subseção onde eles estão descritos, seguido do identificador do requisito, de acordo com a especificação a seguir:
-
-[nome da subseção, identificador do requisito].
-
-Os requisitos devem ser identificados com um identificador único. A numeração inicia com o identificador [RF001] ou [RNF001] e prossegue sendo incrementada à medida que forem surgindo novos requisitos.
+Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (não funcional) seguido de número sequencial. A numeração é incremental e não reutilizada.
 
 === Prioridades dos Requisitos
-Para estabelecer a prioridade dos requisitos foram adotadas as seguintes denominações, "Essencial", "Importante" e "Desejável":
 
-* *Essencial*: é o requisito sem o qual o sistema não entra em funcionamento. Requisitos essenciais são requisitos imprescindíveis.
-* *Importante*: é o requisito sem o qual o sistema entra em funcionamento, mas de forma não satisfatória. Requisitos importantes devem ser implementados, porém, se não forem, o sistema poderá ser implementado e utilizado mesmo assim.
-* *Desejável*: é o requisito que não compromete as funcionalidades básicas do sistema, isto é, o sistema pode funcionar de forma satisfatória sem ele. Requisitos desejáveis são requisitos que podem ser deixados para versões posteriores do sistema, caso não haja tempo hábil para implementá-los na versão que está sendo especificada.
+* *Essencial*: o sistema não entra em funcionamento sem este requisito.
+* *Importante*: o sistema funciona de forma incompleta sem este requisito; deve ser implementado.
+* *Desejável*: não compromete o funcionamento básico; pode ser postergado.
 
-== Referências
-*Este espaço será preenchido com as referências utilizadas para elaboração do documento.*
+== Requisitos Funcionais
 
-== Descrição Geral do Sistema
+=== [RF001] — Cadastro de Usuários
 
-=== Perspectiva do Produto
-O sistema será uma aplicação web independente, acessível via navegadores modernos, utilizando arquitetura cliente-servidor e banco de dados relacional.
+*Descrição*: O sistema deve permitir o cadastro público exclusivamente de candidatos e representantes de empresas. Contas administrativas não podem ser criadas pelo endpoint público.
 
-=== Funções do Produto
-* Cadastro e autenticação de usuário.
-* Gerenciamento de perfis de candidatos e empresas.
-* Cadastro e manutenção de vagas.
-* Busca e filtragem de oportunidades.
-* Candidatura e acompanhamento de vagas.
-* Administração do sistema.
-
-=== Descrição dos Usuários
-
-* *Candidato*: usuários que buscam vagas e se candidatam.
-* *Empresa/Recrutador*: usuários que publicam e gerenciam vagas.
-* *Administrador*: usuários com permissões de gestão global.
-
-== Requisitos
-
-=== Requisitos Funcionais
-Requisitos funcionais descrevem as diversas funções que usuários e clientes querem ou precisam que o software ofereça, ou seja, são requisitos ligados diretamente à funcionalidade do software, que o sistema deve prover. Ian Sommerville define requisitos funcionais como: "São declarações dos serviços que o sistema deve fornecer, do modo como o sistema deve reagir a determinadas entradas e de como deve se comportar em determinadas situações."
-
-==== [RF001] - Cadastro de Usuários
-*Descrição*: Nesta parte o candidato deve adicionar seus dados para cadastro no banco de vagas. O Representante ou Recrutador adiciona dados da empresa para cadastro no banco sendo direcionado para uma área específica conforme o tipo de usuário (candidato ou empresa).
-
-*Atores*: Candidato e Empresa
+*Atores*: Candidato, Empresa/Recrutador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Nome, e-mail, senha, tipo de usuário, idade, data de nascimento, CPF, CNPJ (candidato ou empresa). Usuário não estar previamente cadastrado.
+*Endpoint*: `POST /api/auth/register` (público)
 
-*Saída e pós-condição*: Conta de usuário criada no sistema. Usuário apto a realizar autenticação.
+*Entradas e pré-condições*:
 
-==== [RF002] - Autenticação
-*Descrição*: O sistema deve permitir que usuários cadastrados realizem autenticação para acessar as funcionalidades conforme seu perfil.
+[cols="<,<,<", options="header"]
+|====
+| Campo | Tipo | Regra de validação
+| nome | String | Obrigatório, 3–100 caracteres
+| email | String | Obrigatório, formato e-mail válido, único no sistema
+| senha | String | Obrigatório, mínimo 6 caracteres
+| dataNascimento | Date | Obrigatório, data no passado
+| tipoUsuario | Enum | Obrigatório — exclusivamente CANDIDATO ou EMPRESA; ADMIN é rejeitado
+|====
 
-*Atores*: Candidato, Empresa e Administrador
+*Saída e pós-condição*: Conta criada. O campo `idade` é calculado automaticamente. O usuário fica ativo (`ativo = true`) e apto a realizar autenticação.
+
+*Regras de negócio*:
+
+* E-mail deve ser único; duplicata retorna erro 400.
+* O tipo de usuário não pode ser alterado pelo próprio usuário após o cadastro.
+* A criação ou promoção de ADMIN exige administrador autenticado, autorização explícita e registro de auditoria.
+* Senhas são armazenadas com hash bcrypt (ver [RNF003]).
+
+---
+
+=== [RF002] — Autenticação
+
+*Descrição*: O sistema deve permitir que usuários cadastrados realizem autenticação e recebam um token JWT para acesso às funcionalidades do seu perfil.
+
+*Atores*: Candidato, Empresa, Administrador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: E-mail e senha. Usuário previamente cadastrado e ativo.
+*Endpoints*:
 
-*Saída e pós-condição*: Sessão autenticada iniciada. Usuário com acesso às funcionalidades conforme seu perfil.
+* `POST /api/auth/login` (público) — autentica e retorna token JWT
+* `POST /api/auth/logout` (autenticado) — encerra a sessão conforme a política de revogação definida em [RNF003]
 
-==== [RF003] - Gerenciamento de Perfil do Candidato
-*Descrição*: O sistema deve permitir que candidatos autenticados gerenciem seu perfil, incluindo dados pessoais, formação acadêmica, experiências profissionais e currículo.
+*Entradas e pré-condições*: E-mail e senha válidos. Usuário previamente cadastrado com `ativo = true`.
+
+*Saída e pós-condição*: Token JWT retornado. O token contém o `id`, `email`, `nome` e `tipoUsuario` do usuário e tem validade configurável (padrão 24 horas).
+
+*Regras de negócio*:
+
+* Usuários com `ativo = false` são rejeitados com erro 401.
+* A autenticação usa JWT. Se não houver lista de revogação, o logout invalida apenas a credencial armazenada no cliente; esse comportamento deve ser informado e testado.
+* O token deve ser enviado no cabeçalho `Authorization: Bearer <token>` em todas as requisições autenticadas.
+* Endpoints públicos: `GET /api/vagas/**`, `GET /api/empresas/**`, `GET /api/localizacao/**`, `GET /api/lookup/**`.
+
+---
+
+=== [RF003] — Gerenciamento de Perfil do Candidato
+
+*Descrição*: O sistema deve permitir que candidatos autenticados criem e atualizem seu perfil pessoal, incluindo dados profissionais, formações acadêmicas, experiências de trabalho e currículo.
 
 *Atores*: Candidato
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Dados pessoais, formação acadêmica, experiências profissionais e currículo. Usuário autenticado como candidato.
+*Endpoints* (requerem role `CANDIDATO`):
 
-*Saída e pós-condição*: Perfil do candidato atualizado. Dados disponíveis para candidatura a vagas.
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| POST | `/api/candidatos` | Criar perfil de candidato
+| GET | `/api/candidatos/meu-perfil` | Visualizar próprio perfil
+| PUT | `/api/candidatos/meu-perfil` | Atualizar perfil (CPF, objetivo, pretensão, disponibilidade)
+|====
 
-==== [RF004] - Gerenciamento de Perfil da Empresa
-*Descrição*: O sistema deve permitir que representantes de empresas ou recrutadores autenticados gerenciem o perfil da empresa.
+*Entradas e pré-condições*:
 
-*Atores*: Empresa/Recrutador
+[cols="<,<,<", options="header"]
+|====
+| Campo | Tipo | Regra
+| cpf | String | Obrigatório, formato CPF brasileiro válido, único no sistema
+| resumoProfissional | String | Opcional — objetivo profissional
+| disponibilidade | String | Opcional — ex.: "imediata", "30 dias"
+| pretensaoSalarial | BigDecimal | Opcional, valor ≥ 0,00
+|====
+
+*Saída e pós-condição*: Perfil do candidato criado ou atualizado. Dados disponíveis para filtragem de sugestões e visíveis em candidaturas conforme preferências de privacidade.
+
+*Sub-recursos gerenciados pelo candidato*:
+
+* *Formações* (`/api/candidatos/formacoes`): instituição, curso, nível, datas de início e fim.
+* *Experiências* (`/api/candidatos/experiencias`): empresa, cargo, descrição, datas de início e fim.
+* *Currículo* (`/api/candidatos/curriculo`): upload de arquivo (nome, caminho, tamanho, formato, data de upload).
+
+*Regras de negócio*:
+
+* Um usuário CANDIDATO só pode ter um perfil de candidato.
+* CPF deve ser único no sistema; duplicata retorna erro 400.
+
+---
+
+=== [RF004] — Gerenciamento de Perfil da Empresa
+
+*Descrição*: O sistema deve permitir que representantes de empresas ou recrutadores autenticados criem e atualizem o perfil da empresa. Após o cadastro realizado pelo usuário EMPRESA, o perfil fica com status *PENDENTE* e só se torna visível publicamente após aprovação do administrador.
+
+*Atores*: Empresa/Recrutador, Administrador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Razão Social da empresa, descrição, porte, ramo de atuação, site, endereço e informações de contato. Usuário autenticado como empresa.
+*Endpoints*:
 
-*Saída e pós-condição*: Perfil da empresa atualizado. Empresa apta a cadastrar e gerenciar vagas.
+[cols="<,<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição | Acesso
+| GET | `/api/empresas` | Listar empresas aprovadas | Público
+| GET | `/api/empresas/{id}` | Buscar empresa aprovada por ID | Público
+| GET | `/api/empresas/minha-empresa` | Ver próprio perfil (qualquer status) | EMPRESA
+| POST | `/api/empresas` | Cadastrar empresa | EMPRESA ou ADMIN
+| PUT | `/api/empresas/{id}` | Atualizar empresa | EMPRESA (própria) ou ADMIN
+|====
 
-==== [RF005] - Cadastro de Vagas
-*Descrição*: O sistema deve permitir que empresas autenticadas cadastrem novas vagas de trabalho ou estágio.
+*Entradas e pré-condições*:
 
-*Atores*: Empresa/Recrutador
+[cols="<,<,<", options="header"]
+|====
+| Campo | Tipo | Regra
+| cnpj | String | Obrigatório, formato CNPJ brasileiro válido, único
+| razaoSocial | String | Obrigatório, máx. 150 caracteres
+| nomeFantasia | String | Obrigatório, máx. 150 caracteres
+| descricao | String | Opcional, máx. 500 caracteres
+| porteId | Long | Obrigatório — referência à tabela `portes`
+| ramoId | Long | Obrigatório — referência à tabela `ramos_atuacao`
+| site | String | Opcional, URL válida (http/https)
+| usuarioGestorId | Long | Opcional — apenas ADMIN pode informar para vincular a outro usuário
+|====
+
+*Fluxo de status*:
+
+[cols="^,<,<", options="header"]
+|====
+| Status | Descrição | Visível publicamente?
+| PENDENTE | Cadastro realizado, aguardando análise do administrador | Não
+| APROVADA | Administrador aprovou o cadastro | Sim
+| REJEITADA | Administrador rejeitou o cadastro | Não
+|====
+
+*Saída e pós-condição*: Perfil criado com status *PENDENTE* (se criado por EMPRESA) ou *APROVADA* (se criado por ADMIN). Após aprovação, a empresa aparece nas listagens públicas e fica apta a cadastrar vagas.
+
+*Regras de negócio*:
+
+* Um usuário EMPRESA só pode gerenciar uma única empresa.
+* CNPJ deve ser único; duplicata retorna erro 400.
+* O endpoint `GET /api/empresas` retorna apenas empresas com status *APROVADA*.
+* O endpoint `GET /api/empresas/minha-empresa` retorna o perfil independentemente do status.
+* A empresa pode editar seu perfil enquanto está *PENDENTE* ou *REJEITADA*; o status não é alterado pela edição.
+* O ADMIN que cadastra uma empresa diretamente cria com status *APROVADA*.
+
+---
+
+=== [RF005] — Cadastro de Vagas
+
+*Descrição*: O sistema deve permitir que empresas autenticadas e aprovadas cadastrem vagas de trabalho ou estágio. O servidor controla o estado inicial e a elegibilidade para publicação.
+
+*Atores*: Empresa/Recrutador, Administrador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Título da vaga, descrição, requisitos, tipo (trabalho ou estágio), localidade e data de expiração. Empresa autenticada com perfil completo.
+*Endpoint*: `POST /api/vagas` (requer role `EMPRESA` ou `ADMIN`)
 
-*Saída e pós-condição*: Vaga registrada no sistema. Vaga disponível para busca e candidatura.
+*Entradas e pré-condições*:
 
-==== [RF006] - Manutenção de Vagas
-*Descrição*: O sistema deve permitir que empresas autenticadas realizem manutenção das vagas publicadas, incluindo edição, desativação ou remoção.
+[cols="<,<,<", options="header"]
+|====
+| Campo | Tipo | Regra
+| empresaId | Long | Obrigatório — empresa vinculada à vaga
+| titulo | String | Obrigatório, 5–255 caracteres
+| descricao | String | Obrigatório, mínimo 20 caracteres
+| requisitos | String | Obrigatório
+| tipoVagaId | Long | Obrigatório — referência a `tipos_vaga` (ex.: CLT, PJ, Estágio)
+| modalidadeId | Long | Obrigatório — referência a `modalidades` (ex.: Presencial, Remoto, Híbrido)
+| salarioMinimo | BigDecimal | Obrigatório, valor ≥ 0
+| salarioMaximo | BigDecimal | Obrigatório, valor ≥ 0
+| beneficios | String | Opcional
+| cargaHoraria | String | Obrigatório — ex.: "40h/semana"
+| escolaridadeId | Long | Obrigatório — referência a `niveis_escolaridade`
+| areaAtuacao | String | Obrigatório, máx. 100 caracteres
+| dataExpiracao | LocalDateTime | Obrigatório, data presente ou futura
+| statusVagaId | Long | Não informado pelo cliente no cadastro; o servidor define o estado inicial
+| numeroVagas | Integer | Obrigatório, mínimo 1
+| cidadeId | Long | Obrigatório — referência a `cidades`
+|====
 
-*Atores*: Empresa/Recrutador
+*Saída e pós-condição*: Vaga registrada com data de publicação automática (`dataPublicacao = agora`) e estado inicial definido pelo servidor. A vaga só se torna elegível para busca e candidatura quando estiver ATIVA, não expirada e vinculada a empresa APROVADA.
+
+*Regras de negócio*:
+
+* Apenas a empresa proprietária e APROVADA ou um ADMIN podem cadastrar vagas em nome de uma empresa.
+* O cliente não pode escolher diretamente o estado inicial da vaga.
+* Campos de idade mínima/máxima ficam suspensos como critério de seleção até validação jurídica documentada.
+* `salarioMinimo` deve ser ≤ `salarioMaximo`.
+
+---
+
+=== [RF006] — Manutenção de Vagas
+
+*Descrição*: O sistema deve permitir que empresas autenticadas editem, pausem ou encerrem vagas próprias. Vagas com candidaturas não são excluídas fisicamente. O administrador pode alterar o estado de qualquer vaga mediante auditoria.
+
+*Atores*: Empresa/Recrutador, Administrador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Dados atualizados da vaga ou solicitação de exclusão. Empresa autenticada e proprietária da vaga.
+*Endpoints*:
 
-*Saída e pós-condição*: Vaga atualizada, desativada ou removida. Informações refletidas imediatamente nas buscas.
+[cols="<,<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição | Acesso
+| GET | `/api/vagas` | Listar/filtrar vagas | Público
+| GET | `/api/vagas/{id}` | Buscar vaga por ID | Público
+| GET | `/api/vagas/empresa/{empresaId}` | Listar vagas de uma empresa | Público
+| GET | `/api/vagas/minhas` | Listar vagas da empresa autenticada | EMPRESA
+| PUT | `/api/vagas/{id}` | Atualizar dados da vaga | EMPRESA (própria) ou ADMIN
+| DELETE | `/api/vagas/{id}` | Encerrar logicamente a vaga; exclusão física é vedada quando houver candidaturas | EMPRESA (própria) ou ADMIN
+| PATCH | `/api/admin/vagas/{id}/status/{statusId}` | Alterar status de qualquer vaga | ADMIN
+|====
 
-==== [RF007] - Busca e Filtragem de Vagas
-*Descrição*: Esta parte busca filtrar as vagas conforme as exigências das vagas e o perfil do candidato. O sistema deve recomendar vagas com compatibilidade ao perfil do usuário.
+*Entradas e pré-condições*: Dados atualizados da vaga ou identificador para remoção. Empresa autenticada e proprietária da vaga (ou ADMIN).
+
+*Saída e pós-condição*: Vaga atualizada, pausada ou encerrada. Alterações são refletidas nas buscas; histórico e candidaturas permanecem íntegros.
+
+*Regras de negócio*:
+
+* Usuário EMPRESA só pode editar ou excluir vagas da própria empresa.
+* O ADMIN pode alterar o status de qualquer vaga via endpoint dedicado.
+* Toda alteração de estado registra estado anterior, novo estado, ator, data e motivo.
+* Exclusão física somente é permitida quando não existirem candidaturas nem obrigação de retenção.
+
+---
+
+=== [RF007] — Busca e Filtragem de Vagas
+
+*Descrição*: O sistema deve permitir a busca e filtragem de vagas ativas por múltiplos critérios. O acesso é público, sem necessidade de autenticação.
+
+*Atores*: Candidato, qualquer visitante
+
+*Prioridade*: Essencial
+
+*Endpoint*: `GET /api/vagas` (público)
+
+*Parâmetros de filtro disponíveis* (todos opcionais):
+
+[cols="<,<", options="header"]
+|====
+| Parâmetro | Descrição
+| titulo | Filtra por texto no título da vaga
+| areaAtuacao | Filtra por área de atuação
+| tipoVagaId | Filtra por tipo de vaga (CLT, PJ, Estágio...)
+| modalidadeId | Filtra por modalidade (Presencial, Remoto, Híbrido...)
+|====
+
+*Saída e pós-condição*: Lista de vagas correspondentes aos critérios informados. Sem filtros, retorna todas as vagas disponíveis.
+
+*Regras de negócio*:
+
+* Os filtros são combinados (AND lógico).
+* Por padrão, o backend retorna somente vagas ATIVAS, não expiradas e vinculadas a empresa APROVADA.
+* Outros estados exigem endpoint autenticado e autorização compatível com o ator.
+* Paginação, ordenação e valores padrão devem constar no contrato da API.
+
+---
+
+=== [RF008] — Candidatura à Vaga
+
+*Descrição*: O candidato autenticado pode se candidatar a vagas de interesse. No momento da candidatura, pode configurar quais informações do seu perfil serão compartilhadas com o recrutador, atendendo aos princípios da LGPD.
 
 *Atores*: Candidato
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Palavras-chave, área, localidade, tipo de vaga, idade e outros filtros pertinentes. Existência de vagas ativas no sistema.
+*Endpoint*: `POST /api/candidaturas` (requer role `CANDIDATO`)
 
-*Saída e pós-condição*: Lista de vagas compatíveis com os critérios informados. Usuário visualiza oportunidades filtradas.
+*Entradas e pré-condições*:
 
-==== [RF008] - Candidatura à Vaga
-*Descrição*: O candidato se candidata às vagas de interesse com o currículo já cadastrado no sistema, podendo acessar as vagas existentes. Caso não esteja cadastrado, é direcionado para o cadastro no banco de vagas.
+[cols="<,<,<", options="header"]
+|====
+| Campo | Tipo | Regra
+| vagaId | Long | Obrigatório — identificador da vaga
+| compartilharObjetivoProfissional | Boolean | Opcional, padrão `true`
+| compartilharDisponibilidade | Boolean | Opcional, padrão `true`
+| compartilharPretensaoSalarial | Boolean | Opcional, padrão `true`
+| compartilharCurriculo | Boolean | Opcional, padrão `true`
+| compartilharExperiencias | Boolean | Opcional, padrão `true`
+| compartilharFormacoes | Boolean | Opcional, padrão `true`
+| compartilharTelefone | Boolean | Opcional, padrão `false`
+| compartilharEndereco | Boolean | Opcional, padrão `false`
+|====
 
-*Atores*: Candidato
+*Saída e pós-condição*: Candidatura registrada com data automática (`dataCandidatura = agora`) e as preferências de privacidade informadas. Confirmação retornada com HTTP 201.
+
+*Regras de negócio*:
+
+* A candidatura só é aceita para vaga ATIVA, não expirada e vinculada a empresa APROVADA.
+* O candidato não pode se candidatar duas vezes à mesma vaga (constraint única `candidato_id + vaga_id`).
+* Tentativa de candidatura duplicada retorna erro 400.
+* O candidato pode atualizar suas preferências de privacidade a qualquer momento após a candidatura via `PATCH /api/candidaturas/{id}/compartilhamento`.
+
+---
+
+=== [RF009] — Acompanhamento de Candidaturas
+
+*Descrição*: O sistema deve permitir que candidatos acompanhem o status das suas candidaturas e que empresas visualizem os candidatos inscritos nas suas vagas, com os dados exibidos conforme as preferências de privacidade de cada candidato.
+
+*Atores*: Candidato, Empresa/Recrutador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Identificador da vaga e currículo do candidato. Candidato autenticado e não previamente candidato à vaga.
+*Endpoints — Visão do Candidato* (requerem role `CANDIDATO`):
 
-*Saída e pós-condição*: Candidatura associada ao candidato e à vaga. Confirmação de candidatura registrada.
+[cols="<,<", options="header"]
+|====
+| Endpoint | Descrição
+| `GET /api/candidaturas/minhas` | Lista todas as candidaturas do candidato autenticado com seus respectivos status
+| `GET /api/candidaturas/{id}` | Detalha uma candidatura específica
+| `PATCH /api/candidaturas/{id}/compartilhamento` | Atualiza as 8 preferências de privacidade da candidatura
+|====
 
-==== [RF009] - Acompanhamento de Candidaturas
-*Descrição*: O candidato acompanha a situação atual da sua candidatura às vagas, sendo informado sobre cada passo do processo seletivo, incluindo notificações sobre mudanças de status.
+*Endpoints — Visão da Empresa* (requerem role `EMPRESA`):
 
-*Atores*: Candidato
+[cols="<,<", options="header"]
+|====
+| Endpoint | Descrição
+| `GET /api/candidaturas/empresa` | Lista todas as candidaturas recebidas pela empresa autenticada
+| `GET /api/candidaturas/empresa/vaga/{vagaId}` | Lista candidatos de uma vaga específica da empresa
+| `GET /api/candidaturas/{id}/empresa` | Detalha uma candidatura na visão da empresa
+| `PATCH /api/candidaturas/{id}/status/{statusId}` | Altera o estado por transição permitida e registra auditoria
+|====
 
-*Prioridade*: Essencial
+*Saída e pós-condição*: Candidato visualiza suas candidaturas com status atualizados. A empresa visualiza os candidatos com apenas os dados que cada candidato autorizou compartilhar; campos não autorizados são omitidos da resposta.
 
-*Entradas e pré-condições*: Solicitação de consulta de candidaturas. Candidato autenticado.
+*Regras de negócio*:
 
-*Saída e pós-condição*: Lista de candidaturas com seus respectivos status. Candidato informado sobre o andamento do processo.
+* A empresa só visualiza candidaturas das suas próprias vagas.
+* O candidato só visualiza as próprias candidaturas.
+* Campos com `compartilhar* = false` são omitidos da resposta da visão da empresa quando a serialização usa `@JsonInclude(NON_NULL)`.
+* A empresa proprietária pode alterar o estado de suas candidaturas somente por transições permitidas.
+* Toda transição registra estado anterior, novo estado, ator, data e motivo.
+* O ADMIN pode alterar o status de qualquer candidatura via `PATCH /api/admin/candidaturas/{id}/status/{statusId}`.
 
-==== [RF010] - Administração do Sistema
-*Descrição*: O sistema deve fornecer funcionalidades administrativas para gestão global de usuários, vagas e conteúdos.
+---
+
+=== [RF010] — Administração do Sistema
+
+*Descrição*: O sistema deve fornecer um conjunto completo de funcionalidades administrativas para gestão global de usuários, candidatos, empresas, vagas, candidaturas e administradores, incluindo o fluxo de aprovação de empresas e acesso a estatísticas do sistema.
 
 *Atores*: Administrador
 
 *Prioridade*: Essencial
 
-*Entradas e pré-condições*: Comandos de gerenciamento (usuários, vagas e conteúdos). Usuário autenticado como administrador.
+*Pré-condição*: Usuário autenticado com `tipoUsuario = ADMIN`. Todos os endpoints abaixo têm prefixo `/api/admin`.
 
-*Saída e pós-condição*: Alterações administrativas realizadas. Sistema atualizado conforme ações administrativas.
+==== Gestão de Usuários
 
-=== Requisitos Não Funcionais
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/usuarios` | Listar todos os usuários
+| GET | `/usuarios/{id}` | Buscar usuário por ID
+| PUT | `/usuarios/{id}` | Atualizar dados do usuário
+| PATCH | `/usuarios/{id}/ativar` | Ativar conta de usuário
+| PATCH | `/usuarios/{id}/desativar` | Desativar conta de usuário
+| PATCH | `/usuarios/{id}/tipo/{tipo}` | Alterar tipo do usuário (CANDIDATO, EMPRESA, ADMIN)
+| DELETE | `/usuarios/{id}` | Excluir usuário
+|====
 
-==== [RNF001] - Disponibilidade
-*Descrição*: O sistema deve estar disponível em, no mínimo, 99,5% do tempo durante o horário comercial (08h às 20h), com tolerância a janelas de manutenção previamente agendadas.
+==== Gestão de Candidatos
 
-*Prioridade*: Importante
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/candidatos` | Listar todos os candidatos
+| GET | `/candidatos/{id}` | Buscar candidato por ID
+| PUT | `/candidatos/{id}` | Atualizar perfil de candidato
+| DELETE | `/candidatos/{id}` | Excluir candidato
+|====
 
-==== [RNF002] - Tempo de Resposta
-*Descrição*: As operações de busca, filtragem e candidatura a vagas devem ter tempo de resposta inferior a 3 segundos em condições normais de uso.
+==== Gestão de Empresas (com aprovação)
 
-*Prioridade*: Importante
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/empresas` | Listar todas as empresas (todos os status)
+| GET | `/empresas/pendentes` | Listar empresas aguardando aprovação
+| GET | `/empresas/{id}` | Buscar empresa por ID
+| PATCH | `/empresas/{id}/aprovar` | Aprovar cadastro (status → APROVADA)
+| PATCH | `/empresas/{id}/rejeitar` | Rejeitar cadastro (status → REJEITADA)
+| DELETE | `/empresas/{id}` | Excluir empresa
+|====
 
-==== [RNF003] - Segurança - Autenticação
-*Descrição*: As senhas dos usuários devem ser armazenadas utilizando hash seguro (ex: bcrypt). O sistema deve utilizar HTTPS em todas as comunicações.
+==== Gestão de Vagas
+
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/vagas` | Listar todas as vagas do sistema
+| GET | `/vagas/{id}` | Buscar vaga por ID
+| PATCH | `/vagas/{id}/status/{statusId}` | Alterar status de uma vaga
+| DELETE | `/vagas/{id}` | Excluir vaga
+|====
+
+==== Gestão de Candidaturas
+
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/candidaturas` | Listar todas as candidaturas
+| GET | `/candidaturas/{id}` | Buscar candidatura por ID
+| PATCH | `/candidaturas/{id}/status/{statusId}` | Alterar status de uma candidatura
+| DELETE | `/candidaturas/{id}` | Excluir candidatura
+|====
+
+==== Gestão de Administradores
+
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Descrição
+| GET | `/admins` | Listar todos os administradores
+| GET | `/admins/{id}` | Buscar administrador por ID
+| POST | `/admins` | Promover usuário a administrador (define nível, departamento e permissões)
+| PUT | `/admins/{id}` | Atualizar dados do administrador
+| DELETE | `/admins/{id}` | Remover administrador (reverte o usuário para CANDIDATO)
+|====
+
+==== Estatísticas do Sistema
+
+`GET /api/admin/estatisticas` — retorna contadores globais:
+
+* `totalUsuarios`, `usuariosAtivos`, `usuariosInativos`
+* `totalCandidatos`, `totalEmpresas`, `totalVagas`, `totalCandidaturas`, `totalAdmins`
+
+*Saída e pós-condição*: Ações administrativas realizadas com sucesso. Sistema atualizado conforme as operações executadas.
+
+---
+
+=== [RF011] — Controle de Privacidade nas Candidaturas
+
+*Descrição*: O sistema deve permitir que o candidato controle, de forma granular, quais informações do seu perfil são compartilhadas com o recrutador ao se candidatar a uma vaga, em conformidade com os princípios de minimização de dados da LGPD.
+
+*Atores*: Candidato
 
 *Prioridade*: Essencial
 
-==== [RNF004] - Privacidade e Proteção de Dados
-*Descrição*: O sistema deve estar em conformidade com a LGPD, garantindo que o consentimento do usuário seja coletado e que os dados pessoais sejam tratados com segurança e transparência.
+*Endpoints*:
+
+* `POST /api/candidaturas` — campos de compartilhamento configurados no momento da candidatura (ver [RF008]).
+* `PATCH /api/candidaturas/{id}/compartilhamento` — atualização das preferências a qualquer momento.
+
+*Campos de privacidade controlados*:
+
+[cols="<,<,<", options="header"]
+|====
+| Campo | Padrão | Dado protegido
+| compartilharObjetivoProfissional | `true` | Objetivo profissional do candidato
+| compartilharDisponibilidade | `true` | Disponibilidade de início
+| compartilharPretensaoSalarial | `true` | Pretensão salarial
+| compartilharCurriculo | `true` | Arquivo de currículo
+| compartilharExperiencias | `true` | Histórico de experiências profissionais
+| compartilharFormacoes | `true` | Formação acadêmica
+| compartilharTelefone | `false` | Número(s) de telefone
+| compartilharEndereco | `false` | Endereço residencial
+|====
+
+*Saída e pós-condição*: A visão da empresa em `GET /api/candidaturas/{id}/empresa` omite todos os campos cujo compartilhamento foi desativado pelo candidato. A preferência aplicada fica vinculada à finalidade, à data e à versão da política aceita.
+
+*Regras de negócio*:
+
+* O candidato pode alterar as preferências de qualquer candidatura a qualquer momento, sem efeito retroativo sobre acessos já legitimamente realizados.
+* Campos de dados sensíveis (telefone, endereço) têm padrão `false` para proteção inicial por padrão.
+* A empresa não tem acesso à configuração de privacidade — recebe apenas os dados autorizados.
+
+---
+
+=== [RF012] — Sugestão de Vagas para Candidatos
+
+*Descrição*: O sistema deve oferecer ao candidato uma lista de vagas sugeridas automaticamente, calculada com base na compatibilidade entre o perfil do candidato e as características das vagas disponíveis.
+
+*Atores*: Candidato
+
+*Prioridade*: Importante
+
+*Endpoint*: `GET /api/candidatos/sugestoes` (requer role `CANDIDATO`)
+
+*Critérios de compatibilidade utilizados*:
+
+* *Objetivo profissional*: vagas cuja `areaAtuacao` contém termos do objetivo profissional do candidato.
+* *Pretensão salarial*: vagas com `salarioMinimo ≤ pretensaoSalarial ≤ salarioMaximo`.
+* *Palavras-chave*: similaridade entre título/requisitos da vaga e objetivo, formação e experiências do candidato.
+* *Faixa etária*: não participa do score enquanto não houver validação jurídica documentada.
+
+*Saída e pós-condição*: Lista de até 10 vagas elegíveis, com score de 0 a 100, ordenadas por compatibilidade e excluindo vagas para as quais o candidato já se candidatou. Critérios, pesos, limiar e desempate devem ser versionados e compatíveis com a implementação.
+
+*Regras de negócio*:
+
+* Se nenhum critério de perfil estiver preenchido, o sistema retorna as vagas ativas mais recentes.
+* Vagas já candidatadas são sempre excluídas da listagem de sugestões.
+* O sistema deve fornecer explicação resumida dos principais fatores que contribuíram para cada recomendação.
+
+---
+
+=== [RF013] — Gestão de Dados de Localização
+
+*Descrição*: O sistema deve manter uma base hierárquica de localização (países → estados → cidades) utilizada no cadastro de vagas e disponível publicamente para consulta.
+
+*Atores*: Administrador (escrita), Qualquer usuário (leitura)
+
+*Prioridade*: Importante
+
+*Endpoints* (prefixo `/api/localizacao`):
+
+[cols="<,<,<", options="header"]
+|====
+| Método | Caminho | Acesso
+| GET | `/paises` | Público
+| POST/PUT/DELETE | `/paises`, `/paises/{id}` | ADMIN
+| GET | `/estados?paisId={id}` | Público (filtro por país opcional)
+| POST/PUT/DELETE | `/estados`, `/estados/{id}` | ADMIN
+| GET | `/cidades?estadoId={id}` | Público (filtro por estado opcional)
+| POST/PUT/DELETE | `/cidades`, `/cidades/{id}` | ADMIN
+|====
+
+*Entradas e pré-condições*:
+
+* *País*: nome (obrigatório), codigoIso (2 caracteres, obrigatório)
+* *Estado*: nome (obrigatório, máx. 100 chars), uf (2 chars, obrigatório), paisId (FK obrigatório)
+* *Cidade*: nome (obrigatório, máx. 100 chars), estadoId (FK obrigatório)
+
+*Saída e pós-condição*: Dados de localização criados, atualizados ou removidos. Disponíveis para uso no cadastro de vagas ([RF005]).
+
+---
+
+=== [RF014] — Gestão de Tabelas de Referência do Sistema
+
+*Descrição*: O sistema deve manter tabelas de referência (lookup) utilizadas nos formulários de vagas, candidatos e administração. A leitura é pública; a manutenção é restrita ao administrador.
+
+*Atores*: Administrador (escrita), Qualquer usuário (leitura)
+
+*Prioridade*: Importante
+
+*Tabelas gerenciadas e seus endpoints* (prefixo `/api/lookup`):
+
+[cols="<,<,<", options="header"]
+|====
+| Tabela | Endpoint | Uso
+| Tipos de Vaga | `/vagas/tipos` | Tipo contratual da vaga (CLT, PJ, Estágio...)
+| Modalidades | `/vagas/modalidades` | Formato de trabalho (Presencial, Remoto, Híbrido...)
+| Escolaridades | `/vagas/escolaridades` | Nível mínimo de escolaridade exigido
+| Portes | `/vagas/portes` | Porte da empresa (MEI, Pequena, Média, Grande...)
+| Ramos de Atuação | `/vagas/ramos` | Setor da empresa (Tecnologia, Saúde, Educação...)
+| Status de Vaga | `/vagas/status` | Estados possíveis de uma vaga (Ativa, Pausada, Encerrada...)
+| Status de Candidatura | `/sistema/status-candidatura` | Estados do processo seletivo
+| Tipos de Telefone | `/sistema/tipos-telefone` | Categorias de telefone (Celular, Fixo, WhatsApp...)
+| Departamentos | `/sistema/departamentos` | Departamentos administrativos
+|====
+
+Cada tabela suporta: `GET` (público), `POST`, `PUT/{id}` e `DELETE/{id}` (ADMIN).
+
+*Saída e pós-condição*: Tabelas de referência atualizadas e imediatamente disponíveis para uso nos formulários do sistema.
+
+=== [RF015] — Direitos do Titular de Dados
+
+*Descrição*: O sistema deve disponibilizar fluxo verificável para exercício dos direitos do titular relacionados aos dados pessoais tratados pelo MatchVagas.
+
+*Atores*: Candidato, Empresa/Recrutador, Administrador responsável
 
 *Prioridade*: Essencial
 
-==== [RNF005] - Acessibilidade
-*Descrição*: O sistema deve atender às diretrizes de acessibilidade WCAG 2.1, nível AA, garantindo navegação por teclado, contraste adequado e compatibilidade com leitores de tela.
+*Entradas e pré-condições*: Solicitação autenticada ou identidade validada, indicação do direito exercido e canal de resposta.
+
+*Saída e pós-condição*: Solicitação protocolada com data, responsável, estado, prazo e resposta. O sistema deve permitir confirmação de tratamento, acesso, correção, exportação, revogação e eliminação ou bloqueio quando aplicável, registrando exceções legais de retenção.
+
+*Regras de negócio*:
+
+* A identidade do solicitante deve ser validada antes da entrega ou alteração de dados.
+* Decisões automatizadas e recomendações devem possuir informação compreensível sobre critérios relevantes.
+* Incidentes e solicitações devem manter trilha de auditoria sem expor dados além do necessário.
+* Prazos operacionais e responsáveis devem constar em procedimento aprovado pelo controlador.
+
+---
+
+== Requisitos Não Funcionais
+
+=== [RNF001] — Disponibilidade
+*Descrição*: O sistema deve alcançar disponibilidade mensal mínima de 99,5% no intervalo de 08h às 20h. A medição deve declarar fórmula, fonte de telemetria, fuso horário e janelas de manutenção excluídas.
 
 *Prioridade*: Importante
 
-==== [RNF006] - Compatibilidade
-*Descrição*: O sistema deve ser compatível com os navegadores mais recentes das principais plataformas (Chrome, Firefox, Edge e Safari), tanto em desktop quanto em dispositivos móveis.
+---
+
+=== [RNF002] — Tempo de Resposta
+*Descrição*: Busca, filtragem e candidatura devem apresentar p95 inferior a 3 segundos sob perfil de carga, volume de dados e ambiente versionados no plano de teste.
 
 *Prioridade*: Importante
 
-==== [RNF007] - Integridade de Dados
-*Descrição*: O sistema deve garantir a consistência dos dados armazenados em banco de dados relacional, utilizando transações ACID em operações críticas (ex: cadastro e candidatura).
+---
+
+=== [RNF003] — Segurança — Autenticação e Senhas
+*Descrição*: Senhas devem usar hash seguro e HTTPS é obrigatório em produção. A política deve definir senha, limitação de tentativas, recuperação, duração e rotação de JWT, gestão de chaves e efeito verificável de logout ou revogação.
+
+*Implementação atual*: Spring Security 6 + jjwt (HS256), bcrypt via `PasswordEncoder`.
 
 *Prioridade*: Essencial
 
-==== [RNF008] - Manutenibilidade
-*Descrição*: O código-fonte deve seguir padrões de organização e documentação que permitam fácil manutenção e evolução. Deve-se utilizar versionamento com Git e adotar boas práticas como Clean Code.
+---
+
+=== [RNF004] — Privacidade e Proteção de Dados (LGPD)
+*Descrição*: O sistema deve manter inventário de dados, finalidade e base legal, minimização, qualidade, retenção, descarte, auditoria de consentimento quando aplicável, resposta a incidentes e atendimento aos direitos definidos em [RF015]. Telefone e endereço permanecem desativados por padrão no compartilhamento.
+
+*Prioridade*: Essencial
+
+---
+
+=== [RNF005] — Acessibilidade
+*Descrição*: A interface deve atender à WCAG 2.2 nível AA. Os critérios aplicáveis devem estar ligados a testes automáticos e manuais, incluindo teclado, foco, contraste, mensagens de erro e leitores de tela.
 
 *Prioridade*: Importante
 
-==== [RNF009] - Usabilidade
+---
+
+=== [RNF006] — Compatibilidade
+*Descrição*: Cada release deve publicar matriz de compatibilidade e testar a versão estável atual e a anterior de Chrome, Firefox, Edge e Safari, em superfícies desktop e móveis suportadas.
+
+*Prioridade*: Importante
+
+---
+
+=== [RNF007] — Integridade de Dados
+*Descrição*: O sistema deve garantir a consistência dos dados utilizando transações ACID em operações críticas (cadastro, candidatura, aprovação de empresa). A unicidade de candidatura por par candidato-vaga é garantida por constraint no banco de dados.
+
+*Prioridade*: Essencial
+
+---
+
+=== [RNF008] — Manutenibilidade
+*Descrição*: O código-fonte segue arquitetura em camadas (Controller → Service → Repository), com mapeamento via MapStruct, validação via Bean Validation e documentação da API via OpenAPI/Swagger. Versionamento com Git e boas práticas de Clean Code.
+
+*Prioridade*: Importante
+
+---
+
+=== [RNF009] — Usabilidade
 *Descrição*: A interface do sistema deve ser intuitiva, com design responsivo e fluxos claros para os diferentes perfis de usuário (candidato, empresa e administrador).
 
 *Prioridade*: Importante
 
-==== [RNF010] - Confiabilidade
-*Descrição*: O sistema não deve permitir candidaturas duplicadas para a mesma vaga e deve validar corretamente os dados inseridos nos formulários antes do envio. Garantido que o candidato não passe por tumultos.
+---
+
+=== [RNF010] — Confiabilidade
+*Descrição*: O sistema não deve permitir candidaturas duplicadas para a mesma vaga. Toda entrada de dados é validada no backend (Bean Validation) com mensagens de erro claras. Usuários inativos não podem autenticar.
 
 *Prioridade*: Essencial
 

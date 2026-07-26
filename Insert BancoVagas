@@ -1,0 +1,24 @@
+-- Inserir candidato (vinculado a usuario e endereco)
+INSERT INTO Candidato (id, usuario_id, cpf, endereco_id, objetivoProfissional, pretensaoSalarial, disponibilidade)
+VALUES
+(1, 1, '12345678900', 1, 'Desenvolvedor Full Stack', 6000.00, 'Integral'),
+(2, 2, '98765432100', 2, 'Analista de Dados', 7000.00, 'Meio período');
+
+-- Inserir formações (vinculadas a candidato)
+INSERT INTO Formacao (id, candidato_id, instituicao, curso, nivel, situacao, dataInicio, dataConclusao)
+VALUES
+(1, 1, 'Universidade Federal', 'Ciência da Computação', 'Superior', 'Concluída', '2013-02-01', '2017-12-15'),
+(2, 2, 'Faculdade X', 'Estatística', 'Superior', 'Concluída', '2010-03-01', '2014-12-20');
+
+-- Inserir experiências (vinculadas a candidato)
+INSERT INTO Experiencia (id, candidato_id, empresa, cargo, descricao, dataInicio, dataConclusao, empregadorAtual)
+VALUES
+(1, 1, 'Empresa A', 'Desenvolvedor Java', 'Desenvolvimento de APIs', '2018-01-10', '2021-06-30', FALSE),
+(2, 1, 'Empresa B', 'Desenvolvedor Full Stack', 'Frontend e backend', '2021-07-01', NULL, TRUE),
+(3, 2, 'Empresa C', 'Analista de Dados', 'ETL e modelagem', '2015-05-01', '2020-12-31', FALSE);
+
+-- Inserir candidaturas (vinculadas a candidato e vaga)
+INSERT INTO Candidatura (id, candidato_id, vaga_id, dataCandidatura, status, observacoes, dataAnalise, pontuacao)
+VALUES
+(1001, 1, 101, CURRENT_DATE, 'EM_ANALISE', 'Currículo enviado', NULL, NULL),
+(1002, 2, 102, CURRENT_DATE, 'EM_ANALISE', 'Candidato em início de carreira', NULL, NULL);
