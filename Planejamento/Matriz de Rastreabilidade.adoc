@@ -1,0 +1,110 @@
+= Matriz de Rastreabilidade — MatchVagas
+:revnumber: v1.0
+:revdate: 26/07/2026
+:author: Grupo MatchVagas
+:toc: auto
+:numbered:
+:lang: pt-BR
+
+== Objetivo
+
+Esta matriz vincula cada requisito da ERS v5.1 ao backlog, caso de uso ou fluxo, endpoint, entidades principais e evidência de teste. A indicação *Pendente* é uma lacuna explícita, não evidência de implementação.
+
+== Matriz RF–US–UC–API–dados–teste
+
+[cols="^1,^1,^1,<3,<3,<3", options="header"]
+|===
+| RF | US | UC/Fluxo | Endpoint principal | Entidades | Evidência de teste
+
+| RF001 | US001 | Cadastrar usuário
+| `POST /api/auth/register`
+| Usuario, Candidato, Empresa
+| Pendente: rejeição de ADMIN e auditoria de promoção
+
+| RF002 | US002 | Autenticar/encerrar sessão
+| `POST /api/auth/login`, `POST /api/auth/logout`
+| Usuario
+| Pendente: expiração, revogação e usuário inativo
+
+| RF003 | US003 | Manter perfil do candidato
+| `/api/candidatos/**`
+| Candidato, Curriculo, Experiencia, Formacao
+| Pendente: propriedade, formatos e exclusão
+
+| RF004 | US004 | Manter/aprovar empresa
+| `/api/empresas/**`, `/api/admin/empresas/**`
+| Empresa, Usuario
+| Pendente: estados e autorização
+
+| RF005 | US005 | Cadastrar vaga
+| `POST /api/vagas`
+| Vaga, Empresa, tabelas de referência
+| Pendente: empresa aprovada e estado controlado pelo servidor
+
+| RF006 | US006 | Manter ciclo da vaga
+| `PUT/DELETE /api/vagas/{id}`, `PATCH /api/admin/vagas/{id}/status/{statusId}`
+| Vaga, Candidatura
+| Pendente: encerramento lógico e auditoria
+
+| RF007 | US007 | Buscar e filtrar vagas
+| `GET /api/vagas`
+| Vaga, Empresa, Cidade
+| Pendente: ativa + não expirada + empresa aprovada; paginação
+
+| RF008 | US008 | Candidatar-se
+| `POST /api/candidaturas`
+| Candidatura, Candidato, Vaga
+| Pendente: elegibilidade e unicidade candidato–vaga
+
+| RF009 | US009 | Acompanhar/conduzir candidatura
+| `GET/PATCH /api/candidaturas/**`
+| Candidatura, Vaga, Empresa
+| Pendente: transições permitidas e histórico
+
+| RF010 | US010 | Administrar sistema
+| `/api/admin/**`
+| Usuario, Administrador e agregados
+| Pendente: autorização, auditoria e retenção
+
+| RF011 | US011 | Controlar compartilhamento
+| `PATCH /api/candidaturas/{id}/compartilhamento`
+| Candidatura, Candidato
+| Pendente: omissão de campos e versão da política
+
+| RF012 | US012 | Recomendar vagas
+| `GET /api/candidatos/sugestoes`
+| Candidato, Vaga, Curriculo
+| Pendente: fórmula, score, explicação e exclusões
+
+| RF013 | US013 | Manter localização
+| `/api/localizacao/**`
+| Pais, Estado, Cidade
+| Pendente: integridade e exclusão referenciada
+
+| RF014 | US014 | Manter tabelas de referência
+| `/api/lookup/**`
+| Tipos e estados de domínio
+| Pendente: representação única entre API, UML e banco
+
+| RF015 | US015 | Atender direitos do titular
+| Endpoint a definir
+| Usuario e dados vinculados; registro de solicitação
+| Pendente: protocolo, identidade, prazo, resposta e retenção
+|===
+
+== Cobertura documental inicial
+
+[cols="<,^,^", options="header"]
+|===
+| Artefato | Cobertura esperada | Situação da v1.0
+| ERS | RF001–RF015 | Completa
+| Backlog | US001–US015 | Completa
+| Casos de uso | Fluxos de RF001–RF015 | Parcial; faltam RF011, RF013, RF014 e RF015
+| Endpoints | Contrato por RF | Parcial; RF015 ainda sem endpoint
+| Modelo de dados | Entidades e integridade | Parcial; divergências registradas na revisão v5.1
+| Testes | Aceitação por RF | Pendente de vinculação
+|===
+
+== Regra de atualização
+
+A matriz deve ser atualizada no mesmo pull request que alterar um RF, US, fluxo, endpoint, entidade ou teste. Nenhuma linha pode apontar para uma versão documental substituída.
