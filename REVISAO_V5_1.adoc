@@ -1,0 +1,83 @@
+= Registro da Revisão Documental v5.1
+:revnumber: v1.0
+:revdate: 26/07/2026
+:author: Grupo MatchVagas
+:toc: auto
+:numbered:
+:lang: pt-BR
+
+== Situação
+
+Esta revisão é uma proposta aplicada em branch separada. Nenhuma mudança deve ser mesclada antes da validação dos portões de aprovação descritos no README.
+
+== Escopo aplicado
+
+* ERS promovida de v5.0 para v5.1.
+* Cadastro público limitado a CANDIDATO e EMPRESA.
+* Elegibilidade de vaga centralizada no backend.
+* Exclusão física de vaga com candidatura vedada.
+* Transição de candidaturas pela empresa proprietária especificada com auditoria.
+* Contradição entre campo `null` e omissão por serialização corrigida.
+* Filtro etário suspenso até validação jurídica documentada.
+* Novo RF015 para direitos do titular.
+* RNF001–RNF006 convertidos em critérios verificáveis.
+* Backlog unificado e alinhado a RF001–RF015.
+* Matriz de rastreabilidade criada.
+* README transformado em mapa da baseline e dos portões de aprovação.
+
+== Inconsistências registradas para próximas etapas
+
+=== Arquitetura
+
+* Cabeçalho, atributo de versão e histórico não concordam.
+* Introdução contém texto alheio ao domínio do MatchVagas.
+* Stack está aberta entre tecnologias incompatíveis, embora os demais artefatos apontem Java/Spring.
+* Diagrama mistura implementação atual com Redis, Kafka e Elasticsearch planejados.
+* Superfícies web, aplicativos móveis e API ainda precisam ser confirmadas.
+
+=== Dados
+
+* DER possui 28 tabelas, enquanto material de apresentação informa 33 entidades.
+* `TipoVaga` aparece como enum na UML e como lookup no ERS/DER.
+* Candidato e currículo mantêm referências circulares.
+* Endereço textual convive com hierarquia país–estado–cidade.
+* Unicidade candidato–vaga não está explícita no DER.
+* Seed `Insert BancoVagas` diverge em nomes, tipos e colunas e deve ser convertido em arquivo `.sql` alinhado ao DDL.
+
+=== Casos de uso
+
+* Faltam fluxos para privacidade, localização, tabelas de referência e direitos do titular.
+* Recuperação de senha aparece sem requisito funcional correspondente.
+* Nomes, acentuação e relações include/extend precisam de revisão.
+
+== Decisões obrigatórias
+
+[cols="^1,<4,<4", options="header"]
+|===
+| ID | Decisão | Responsável sugerido
+| DEC-01 | Uma empresa terá um único usuário ou múltiplos recrutadores? | Product Owner
+| DEC-02 | Quais superfícies estão implementadas e suportadas? | Product Owner + Tech Lead
+| DEC-03 | Qual banco e stack formam a implementação canônica? | Tech Lead
+| DEC-04 | Redis, Kafka e Elasticsearch são atuais ou roadmap? | Tech Lead
+| DEC-05 | Qual fórmula e quais pesos de match estão aprovados? | Product Owner + Tech Lead
+| DEC-06 | Qual política de retenção e exclusão vale por entidade? | Produto + Privacidade
+| DEC-07 | O filtro etário é legalmente justificável em algum fluxo? | Assessoria jurídica/privacidade
+|===
+
+== Ordem de adoção
+
+. Revisar e aprovar as correções P0 da ERS.
+. Confirmar decisões DEC-01–DEC-07.
+. Atualizar arquitetura para v3.1, separando atual e futuro.
+. Reconciliar UML, DER, DDL e seed.
+. Atualizar os casos de uso e inserir identificadores RF.
+. Vincular testes reais na matriz de rastreabilidade.
+. Automatizar renderização AsciiDoc e verificação de links.
+. Mesclar somente após revisão conjunta dos artefatos.
+
+== Referências externas
+
+* ISO/IEC/IEEE 29148:2018 — https://www.iso.org/standard/72089.html
+* WCAG 2.2 — https://www.w3.org/TR/WCAG22/
+* Lei 9.029/1995 — https://www.planalto.gov.br/ccivil_03/leis/l9029.htm
+* LGPD — https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
