@@ -475,8 +475,8 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | PUT | `/usuarios/{id}` | Atualizar dados do usuário
 | PATCH | `/usuarios/{id}/ativar` | Ativar conta de usuário
 | PATCH | `/usuarios/{id}/desativar` | Desativar conta de usuário
-| PATCH | `/usuarios/{id}/tipo/{tipo}` | Alterar tipo do usuário (CANDIDATO, EMPRESA, ADMIN)
-| DELETE | `/usuarios/{id}` | Excluir usuário
+| PATCH | `/usuarios/{id}/tipo/{tipo}` | Alterar entre perfis não administrativos; promoção a ADMIN ocorre somente em `/admins`
+| DELETE | `/usuarios/{id}` | Desativar ou anonimizar conforme retenção; exclusão física depende de integridade referencial
 |====
 
 ==== Gestão de Candidatos
@@ -487,7 +487,7 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | GET | `/candidatos` | Listar todos os candidatos
 | GET | `/candidatos/{id}` | Buscar candidato por ID
 | PUT | `/candidatos/{id}` | Atualizar perfil de candidato
-| DELETE | `/candidatos/{id}` | Excluir candidato
+| DELETE | `/candidatos/{id}` | Desativar ou anonimizar o perfil preservando candidaturas e auditoria quando exigido
 |====
 
 ==== Gestão de Empresas (com aprovação)
@@ -500,7 +500,7 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | GET | `/empresas/{id}` | Buscar empresa por ID
 | PATCH | `/empresas/{id}/aprovar` | Aprovar cadastro (status → APROVADA)
 | PATCH | `/empresas/{id}/rejeitar` | Rejeitar cadastro (status → REJEITADA)
-| DELETE | `/empresas/{id}` | Excluir empresa
+| DELETE | `/empresas/{id}` | Desativar ou anonimizar conforme retenção; preservar vagas, candidaturas e auditoria
 |====
 
 ==== Gestão de Vagas
@@ -511,7 +511,7 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | GET | `/vagas` | Listar todas as vagas do sistema
 | GET | `/vagas/{id}` | Buscar vaga por ID
 | PATCH | `/vagas/{id}/status/{statusId}` | Alterar status de uma vaga
-| DELETE | `/vagas/{id}` | Excluir vaga
+| DELETE | `/vagas/{id}` | Encerrar logicamente; exclusão física somente sem candidaturas e sem retenção aplicável
 |====
 
 ==== Gestão de Candidaturas
@@ -522,7 +522,7 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | GET | `/candidaturas` | Listar todas as candidaturas
 | GET | `/candidaturas/{id}` | Buscar candidatura por ID
 | PATCH | `/candidaturas/{id}/status/{statusId}` | Alterar status de uma candidatura
-| DELETE | `/candidaturas/{id}` | Excluir candidatura
+| DELETE | `/candidaturas/{id}` | Cancelar ou anonimizar conforme regra; preservar histórico exigido
 |====
 
 ==== Gestão de Administradores
@@ -534,7 +534,7 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 | GET | `/admins/{id}` | Buscar administrador por ID
 | POST | `/admins` | Promover usuário a administrador (define nível, departamento e permissões)
 | PUT | `/admins/{id}` | Atualizar dados do administrador
-| DELETE | `/admins/{id}` | Remover administrador (reverte o usuário para CANDIDATO)
+| DELETE | `/admins/{id}` | Revogar privilégio administrativo; restaurar perfil anterior somente quando registrado
 |====
 
 ==== Estatísticas do Sistema
@@ -544,7 +544,15 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 * `totalUsuarios`, `usuariosAtivos`, `usuariosInativos`
 * `totalCandidatos`, `totalEmpresas`, `totalVagas`, `totalCandidaturas`, `totalAdmins`
 
-*Saída e pós-condição*: Ações administrativas realizadas com sucesso. Sistema atualizado conforme as operações executadas.
+*Saída e pós-condição*: Ação administrativa concluída com resultado explícito. Toda mutação registra operação, recurso, identificador, ator, data, resultado e motivo quando aplicável.
+
+*Regras de negócio*:
+
+* Nenhum endpoint público pode criar ou promover ADMIN; a promoção ocorre exclusivamente em `POST /api/admin/admins`.
+* O sistema deve impedir que um administrador remova o próprio último privilégio quando isso deixar o sistema sem ADMIN ativo.
+* Exclusões obedecem integridade referencial, política de retenção e direitos do titular; quando necessário, aplicam desativação, anonimização ou encerramento lógico.
+* Alterações de tipo, aprovação de empresa, estados de vaga/candidatura e privilégios administrativos exigem auditoria.
+* Estatísticas devem ser agregadas, autorizadas e não expor dados pessoais desnecessários.
 
 ---
 
@@ -640,7 +648,14 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 * *Estado*: nome (obrigatório, máx. 100 chars), uf (2 chars, obrigatório), paisId (FK obrigatório)
 * *Cidade*: nome (obrigatório, máx. 100 chars), estadoId (FK obrigatório)
 
-*Saída e pós-condição*: Dados de localização criados, atualizados ou removidos. Disponíveis para uso no cadastro de vagas ([RF005]).
+*Saída e pós-condição*: Dados de localização criados ou atualizados e disponíveis para uso no cadastro de vagas ([RF005]). Remoções preservam a integridade das referências existentes.
+
+*Regras de negócio*:
+
+* `codigoIso` é único por país; `uf` é única dentro do país e cidade é única dentro do estado conforme regra de normalização adotada.
+* Não é permitido remover país com estados, estado com cidades ou cidade referenciada por vaga/endereço, salvo migração transacional previamente definida.
+* Operações de escrita registram ator, data e resultado em auditoria administrativa.
+* A API deve usar identificadores da hierarquia; cidade/estado em texto livre não substituem as referências canônicas.
 
 ---
 
@@ -670,7 +685,17 @@ Os requisitos são identificados pelo prefixo `[RF]` (funcional) ou `[RNF]` (nã
 
 Cada tabela suporta: `GET` (público), `POST`, `PUT/{id}` e `DELETE/{id}` (ADMIN).
 
-*Saída e pós-condição*: Tabelas de referência atualizadas e imediatamente disponíveis para uso nos formulários do sistema.
+*Saída e pós-condição*: Tabelas de referência atualizadas e imediatamente disponíveis para uso nos formulários do sistema, sem invalidar registros existentes.
+
+*Regras de negócio*:
+
+* Identificadores já referenciados não podem ser reutilizados para outro significado.
+* Exclusão é bloqueada quando houver referência; desativação lógica é preferida quando o valor não deve mais ser selecionado.
+* API, UML, DER e código devem adotar uma representação canônica por conceito; não é permitido manter simultaneamente enum e lookup divergentes.
+* Mudanças em estados de vaga ou candidatura devem preservar compatibilidade com as transições documentadas.
+* Operações administrativas registram ator, data, alteração e resultado.
+
+---
 
 === [RF015] — Direitos do Titular de Dados
 
@@ -740,30 +765,69 @@ Cada tabela suporta: `GET` (público), `POST`, `PUT/{id}` e `DELETE/{id}` (ADMIN
 ---
 
 === [RNF007] — Integridade de Dados
-*Descrição*: O sistema deve garantir a consistência dos dados utilizando transações ACID em operações críticas (cadastro, candidatura, aprovação de empresa). A unicidade de candidatura por par candidato-vaga é garantida por constraint no banco de dados.
+*Descrição*: Cadastro, candidatura, aprovação e transições de estado devem executar em transações ACID. Chaves estrangeiras e constraints devem proteger referências; o banco deve impor unicidade para `candidato_id + vaga_id`. Migrações devem ser versionadas, reversíveis quando tecnicamente possível e validadas em ambiente equivalente ao de produção.
+
+*Critérios de verificação*:
+
+* teste concorrente demonstra que duas candidaturas para o mesmo par não são persistidas;
+* falha intermediária em operação transacional não deixa dados parciais;
+* exclusão referenciada retorna conflito ou aplica a política documentada de desativação/anonimização;
+* migração é aplicada a partir de uma cópia representativa sem perda inesperada.
 
 *Prioridade*: Essencial
 
 ---
 
 === [RNF008] — Manutenibilidade
-*Descrição*: O código-fonte segue arquitetura em camadas (Controller → Service → Repository), com mapeamento via MapStruct, validação via Bean Validation e documentação da API via OpenAPI/Swagger. Versionamento com Git e boas práticas de Clean Code.
+*Descrição*: O código deve manter separação Controller → Service → Repository, validação centralizada, mapeamento explícito e contrato OpenAPI versionado. Toda mudança deve passar por build reproduzível, testes automatizados e análise estática no CI.
+
+*Critérios de verificação*:
+
+* pull request falha quando build, testes, lint ou geração da documentação falham;
+* alteração incompatível do contrato da API é detectada e registrada;
+* dependências e versões suportadas são declaradas em arquivos de build;
+* decisão que muda a arquitetura é registrada em ADR ou seção equivalente.
 
 *Prioridade*: Importante
 
 ---
 
 === [RNF009] — Usabilidade
-*Descrição*: A interface do sistema deve ser intuitiva, com design responsivo e fluxos claros para os diferentes perfis de usuário (candidato, empresa e administrador).
+*Descrição*: Os fluxos críticos de cadastro, busca, candidatura, publicação de vaga e análise de candidatos devem possuir instruções, validação próxima ao campo, preservação de dados após erro e confirmação inequívoca do resultado.
+
+*Critérios de verificação*:
+
+* cenários, participantes, dispositivos, taxa de conclusão e tempo-alvo são definidos no plano de teste de usabilidade;
+* erros informam causa e ação corretiva sem expor detalhes internos;
+* layout permanece funcional nos tamanhos de tela declarados como suportados;
+* ações destrutivas exigem confirmação e apresentam consequência.
 
 *Prioridade*: Importante
 
 ---
 
 === [RNF010] — Confiabilidade
-*Descrição*: O sistema não deve permitir candidaturas duplicadas para a mesma vaga. Toda entrada de dados é validada no backend (Bean Validation) com mensagens de erro claras. Usuários inativos não podem autenticar.
+*Descrição*: Regras críticas devem ser aplicadas no backend e, quando cabível, reforçadas pelo banco. Respostas de erro devem usar formato padronizado e identificador de correlação; usuários inativos não autenticam e operações repetidas não podem produzir duplicação indevida.
+
+*Critérios de verificação*:
+
+* testes cobrem duplicidade, usuário inativo, autorização por propriedade e transições inválidas;
+* erros 4xx não persistem alterações parciais e não expõem segredo ou stack trace;
+* logs permitem correlacionar a requisição sem registrar senha, token ou dado pessoal desnecessário;
+* procedimento de backup e restauração possui periodicidade, responsável e teste de recuperação registrados.
 
 *Prioridade*: Essencial
+
+== Rastreabilidade e controle da baseline
+
+A cobertura entre requisitos, backlog, casos de uso, endpoints, entidades e testes é mantida em link:../Planejamento/Matriz%20de%20Rastreabilidade.adoc[Matriz de Rastreabilidade]. O arquivo `Outra Visão.adoc` é legado e não constitui fonte normativa.
+
+Toda alteração de RF ou RNF deve:
+
+. atualizar a matriz no mesmo pull request;
+. registrar impacto em backlog, API, dados e testes;
+. informar compatibilidade e migração quando houver mudança de contrato;
+. preservar o histórico de revisão deste documento.
 
 == Aprovação
 
